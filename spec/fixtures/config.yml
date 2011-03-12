@@ -1,0 +1,13 @@
+#Input files
+input:
+  training: Rtraining.h40
+  testing:  Rtesting.h40
+
+#Forest parameters
+forest:
+  forest_size: 500
+  sample_size_m: 60
+  number_of_SNPs: 200
+  loss_function_discrete: 2
+  loss_function_cont: 2
+  max_branches: 2000
