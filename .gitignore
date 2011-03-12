@@ -1,4 +1,5 @@
 *.gem
 pkg
 rdoc
+.rvmrc
 .bundle
