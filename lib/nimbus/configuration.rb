@@ -15,7 +15,8 @@ module Nimbus
       :do_training,
       :do_testing,
       :training_set,
-      :output_forest_file
+      :output_forest_file,
+      :output_training_file
     )
     
     DEFAULTS = {
@@ -33,7 +34,8 @@ module Nimbus
       :forest_file   => 'forest.yml',
       :config_file   => 'config.yml',
       
-      :output_forest_file => 'random_forest.yml'
+      :output_forest_file => 'random_forest.yml',
+      :output_training_file => 'training_file_predictions.yml'
     }
     
     
@@ -50,6 +52,7 @@ module Nimbus
       @loss_function_continuous = DEFAULTS[:loss_function_continuous]
       
       @output_forest_file = File.expand_path(DEFAULTS[:output_forest_file], Dir.pwd)
+      @output_training_file = File.expand_path(DEFAULTS[:output_training_file], Dir.pwd)
     end
     
     def tree
@@ -124,6 +127,17 @@ module Nimbus
     end
     
     def log_configuration
+      if !@do_training && !@do_testing
+        Nimbus.message "*" * 50
+        Nimbus.message "* Nimbus could not find any input file: "
+        Nimbus.message "*   No training file (default: training.data)"
+        Nimbus.message "*   No testing file (default: testing.data)"
+        Nimbus.message "*   Not defined in config file (default: config.yml)"
+        Nimbus.message "* Nothing to do."
+        Nimbus.message "*" * 50
+        Nimbus.stop "Error: No input data. Nimbus finished."
+      end
+      
       Nimbus.message "*" * 50
       Nimbus.message "* Nimbus configured with the following parameters: "
       Nimbus.message "*   Forest size: #{@forest_size} trees"
@@ -132,6 +146,7 @@ module Nimbus
       Nimbus.message "*   Maximum number of branches per tree: #{@tree_max_branches}"
       Nimbus.message "*   Minimun node size in tree: #{@tree_node_min_size}"
       Nimbus.message "*" * 50
+      
       if @do_training
         Nimbus.message "* Training data:"
         Nimbus.message "*   Training file: #{@training_file}"

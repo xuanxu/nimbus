@@ -23,13 +23,16 @@ module Nimbus
     # * Writes results to output files.
     def run
       nimbus_exception_handling do
-        forest = ::Nimbus::Forest.new @config
-        forest.grow if @config.do_training && @config.load_training_data
-        output_random_forest_file(forest)
+        if @config.do_training && @config.load_training_data
+          forest = ::Nimbus::Forest.new @config
+          forest.grow if @config.do_training && @config.load_training_data
+          output_random_forest_file(forest)
+          output_training_file_predictions(forest)
+        end
       end
     end
 
-    # Createas an instance of Nimbus::Configuration if it does not exist.
+    # Creates an instance of Nimbus::Configuration if it does not exist.
     def config
       @config ||= ::Nimbus::Configuration.new
     end
@@ -66,10 +69,20 @@ module Nimbus
     protected
     def output_random_forest_file(forest)
       File.open(@config.output_forest_file , 'w') {|f| f.write(forest.to_yaml) }
-      Nimbus.message "* Resulting forest structure be saved to:"
+      Nimbus.message "* Random forest structure saved to:"
       Nimbus.message "*   Output forest file: #{@config.output_forest_file}"
       Nimbus.message "*" * 50
-      
+    end
+    
+    def output_training_file_predictions(forest)
+      File.open(@config.output_training_file , 'w') {|f|
+        forest.predictions.sort.each{|p|
+          f.write("#{p[0]} #{p[1]}\n")
+        }
+      }
+      Nimbus.message "* Predictions for the training individuals saved to:"
+      Nimbus.message "*   Output forest file: #{@config.output_training_file}"
+      Nimbus.message "*" * 50
     end
     
   end

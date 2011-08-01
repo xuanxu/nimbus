@@ -1,7 +1,7 @@
 module Nimbus
   
   class Tree
-    attr_accessor :snp_sample_size, :snp_total_count, :node_min_size, :max_branches, :structure
+    attr_accessor :snp_sample_size, :snp_total_count, :node_min_size, :max_branches, :structure, :predictions
     attr_accessor :individuals, :id_to_fenotype
     
     def initialize(options)
@@ -14,6 +14,7 @@ module Nimbus
     def seed(all_individuals, individuals_sample, ids_fenotypes)
       @individuals = all_individuals
       @id_to_fenotype = ids_fenotypes
+      @predictions = {}
       
       @structure = build_node individuals_sample, Nimbus::LossFunctions.average(individuals_sample, @id_to_fenotype)
     end
@@ -21,7 +22,7 @@ module Nimbus
     def build_node(individuals_ids, y_hat)
       # General loss function value for the node
       individuals_count = individuals_ids.size
-      return y_hat.round(5) if individuals_count < @node_min_size
+      return label_node(y_hat, individuals_ids) if individuals_count < @node_min_size
       node_loss_function = Nimbus::LossFunctions.quadratic_loss individuals_ids, @id_to_fenotype, y_hat
       
       # Finding the SNP that minimizes loss function
@@ -41,15 +42,14 @@ module Nimbus
         min_loss, min_SNP, split, means = loss_snp, snp, individuals_split_by_snp_value, [mean_0, mean_1, mean_2] if loss_snp < min_loss
       end
       
-      
       return build_branch(min_SNP, split, means, y_hat) if min_loss < node_loss_function
-      return y_hat.round(5)
+      return label_node(y_hat, individuals_ids)
     end
     
     def build_branch(snp, split, y_hats, parent_y_hat)
-      node_0 = split[0].size == 0 ? parent_y_hat.round(5) : build_node(split[0], y_hats[0])
-      node_1 = split[1].size == 0 ? parent_y_hat.round(5) : build_node(split[1], y_hats[1])
-      node_2 = split[2].size == 0 ? parent_y_hat.round(5) : build_node(split[2], y_hats[2])
+      node_0 = split[0].size == 0 ? label_node(parent_y_hat, []) : build_node(split[0], y_hats[0])
+      node_1 = split[1].size == 0 ? label_node(parent_y_hat, []) : build_node(split[1], y_hats[1])
+      node_2 = split[2].size == 0 ? label_node(parent_y_hat, []) : build_node(split[2], y_hats[2])
       
       return { snp => [node_0, node_1, node_2] }
     end
@@ -67,6 +67,12 @@ module Nimbus
     
     def snps_random_sample
       (1..@snp_total_count).to_a.sample(@snp_sample_size).sort
+    end
+    
+    def label_node(value, ids)
+      label = value.round(5)
+      ids.uniq.each{|i| @predictions[i] = label}
+      label
     end
     
     def split_by_snp_value(ids, snp)
