@@ -1,16 +1,48 @@
 require 'yaml'
+require 'optparse'
+require 'nimbus/exceptions'
+require 'nimbus/training_set'
+require 'nimbus/configuration'
+require 'nimbus/loss_functions'
+require 'nimbus/individual'
+require 'nimbus/tree'
+require 'nimbus/forest'
+require 'nimbus/application'
+
 module Nimbus
-  def initialize
-    load_config_params('./config.yml')
-  end
   
-  def load_config_params(config_file)
-    config = config_file || './config.yml'
-    @config_params = YAML.load_file(config) rescue {}
-  end
+  STDERR = $stderr
+  STDOUT = $stdout
   
-  def config_params
-    @config_params
+  # Nimbus module singleton methods.
+  #
+  class << self
+    # Current Nimbus Application
+    def application
+      @application ||= ::Nimbus::Application.new
+    end
+    
+    # Set the current Nimbus application object.
+    def application=(app)
+      @application = app
+    end
+    
+    # Stops the execution of the Nimbus application.
+    def stop(msg = "Error: Nimbus finished.")  # :nodoc:
+      STDERR.puts msg
+      exit(false)
+    end
+    
+    # Writes message to the standard output
+    def message(msg)
+      STDOUT.puts msg
+    end
+    
+    # Writes message to the error output
+    def error_message(msg)
+      STDERR.puts msg
+    end
+    
   end
   
 end
