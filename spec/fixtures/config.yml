@@ -5,9 +5,10 @@ input:
 
 #Forest parameters
 forest:
-  forest_size: 500
-  sample_size_m: 60
-  number_of_SNPs: 200
+  forest_size: 500 #how many trees
+  SNP_sample_size_mtry: 60 #mtry
+  SNP_total_count: 200
+  max_branches: 2000
+  node_min_size: 5
   loss_function_discrete: 2
   loss_function_cont: 2
-  max_branches: 2000

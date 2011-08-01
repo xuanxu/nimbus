@@ -22,7 +22,6 @@ module Nimbus
     # * Creates a Nimbus::Forest object.
     # * Writes results to output files.
     def run
-      puts time
       nimbus_exception_handling do
         forest = ::Nimbus::Forest.new @config
         forest.grow if @config.do_training && @config.load_training_data
