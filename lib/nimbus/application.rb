@@ -80,7 +80,7 @@ module Nimbus
           f.write("#{p[0]} #{p[1]}\n")
         }
       }
-      Nimbus.message "* Predictions for the training individuals saved to:"
+      Nimbus.message "* Predictions for the training sample saved to:"
       Nimbus.message "*   Output forest file: #{@config.output_training_file}"
       Nimbus.message "*" * 50
     end
