@@ -98,7 +98,7 @@ module Nimbus
         @tree_max_branches    = user_config_params['forest']['max_branches'].to_i  if user_config_params['forest']['max_branches']
         @tree_node_min_size   = user_config_params['forest']['node_min_size'].to_i if user_config_params['forest']['node_min_size']
       end
-      
+
       check_configuration
       log_configuration
     end
@@ -110,6 +110,8 @@ module Nimbus
           next if line.strip == ''
           data_feno, data_id, *snp_list = line.strip.split
           raise Nimbus::InputFileError, "Individual ##{data_id} from training set has no value for all #{@tree_SNP_total_count} SNPs" unless snp_list.size == @tree_SNP_total_count
+          raise Nimbus::InputFileError, "There are individuals with no ID, please check data in training file." unless (!data_id.nil? && data_id.strip != '')
+          raise Nimbus::InputFileError, "Individual ##{data_id} has no fenotype value, please check data in training file." unless (!data_feno.nil? && data_feno.strip != '')
           @training_set.individuals[data_id.to_i] = Nimbus::Individual.new(data_id.to_i, data_feno.to_f, snp_list.map{|snp| snp.to_i})
           @training_set.ids_fenotypes[data_id.to_i] = data_feno.to_f
         end

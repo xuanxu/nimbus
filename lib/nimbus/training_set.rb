@@ -7,6 +7,11 @@ module Nimbus
       @individuals   = individuals
       @ids_fenotypes = ids_fenotypes
     end
+    
+    def all_ids
+      @all_ids ||= @ids_fenotypes.keys
+      @all_ids
+    end
   end
   
 end

@@ -25,7 +25,7 @@ module Nimbus
       nimbus_exception_handling do
         if @config.do_training && @config.load_training_data
           forest = ::Nimbus::Forest.new @config
-          forest.grow if @config.do_training && @config.load_training_data
+          forest.grow
           output_random_forest_file(forest)
           output_training_file_predictions(forest)
         end
@@ -37,7 +37,7 @@ module Nimbus
       @config ||= ::Nimbus::Configuration.new
     end
     
-    # Provide exception handling for the given block.
+    # Provides the default exception handling for the given block.
     def nimbus_exception_handling
       begin
         yield
@@ -55,7 +55,7 @@ module Nimbus
       end
     end
     
-    # Display the error message that caused the exception.
+    # Display an error message that caused a exception.
     def display_error_message(ex)
       Nimbus.error_message "* Nimbus encountered an error! The random forest was not generated *"
       Nimbus.error_message "#{ex.class}: #{ex.message}"

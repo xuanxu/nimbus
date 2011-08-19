@@ -40,7 +40,7 @@ module Nimbus
     end
     
     def bag
-      @bag ||= (1..@options.training_set.individuals.size).to_a
+      @bag ||= @options.training_set.all_ids
     end
     
     def acumulate_predictions(preds)
