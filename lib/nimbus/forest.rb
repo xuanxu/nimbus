@@ -9,6 +9,7 @@ module Nimbus
       @options = config
       @size = config.forest_size
       @predictions = {}
+      @times_predicted =[]
       raise Nimbus::ForestError, "Forest size parameter (#{@size}) is invalid. You need at least one tree." if @size < 1
     end
     
@@ -46,15 +47,17 @@ module Nimbus
       preds.each_pair.each{|id, value|
         if @predictions[id].nil?
           @predictions[id] = value
+          @times_predicted[id] = 1.0
         else
           @predictions[id] += value
+          @times_predicted[id] += 1
         end
       }
     end
     
     def average_predictions
       @predictions.each_pair{|id, value|
-        @predictions[id] = (@predictions[id] / @size).round(5)
+        @predictions[id] = (@predictions[id] / @times_predicted[id]).round(5)
       }
     end
     

@@ -28,7 +28,7 @@ module Nimbus
     end
     
     # Stops the execution of the Nimbus application.
-    def stop(msg = "Error: Nimbus finished.")  # :nodoc:
+    def stop(msg = "Error: Nimbus finished.")
       STDERR.puts msg
       exit(false)
     end
