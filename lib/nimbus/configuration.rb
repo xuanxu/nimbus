@@ -142,7 +142,7 @@ module Nimbus
       Nimbus.message "* Nimbus configured with the following parameters: "
       Nimbus.message "*   Forest size: #{@forest_size} trees"
       Nimbus.message "*   Total SNP count: #{@tree_SNP_total_count}"
-      Nimbus.message "*   SNPs sample size (mtry): #{@SNP_sample_size}"
+      Nimbus.message "*   SNPs sample size (mtry): #{@tree_SNP_sample_size}"
       Nimbus.message "*   Maximum number of branches per tree: #{@tree_max_branches}"
       Nimbus.message "*   Minimun node size in tree: #{@tree_node_min_size}"
       Nimbus.message "*" * 50
