@@ -14,12 +14,14 @@ module Nimbus
     end
     
     def grow
-      @size.times do
+      @size.times do |i|
+        Nimbus.write("Creating trees: #{i+1}/#{@size} ")
         tree_individuals_bag = individuals_random_sample
         tree_out_of_bag = oob tree_individuals_bag
         tree = Tree.new @options.tree
         @trees << tree.seed(@options.training_set.individuals, tree_individuals_bag, @options.training_set.ids_fenotypes)
         acumulate_predictions tree.predictions
+        Nimbus.clear_line!
       end
       average_predictions
     end
