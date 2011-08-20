@@ -24,10 +24,21 @@ module Nimbus
       average_predictions
     end
     
+    def traverse
+      @predictions = {}
+      prediction_count = trees.size
+      @options.read_testing_data{|individual|
+        individual_prediction=0.0
+        trees.each do |t|
+          individual_prediction = (individual_prediction + Nimbus::Tree.traverse(t, individual.snp_list)).round(5)
+        end
+        @predictions[individual.id] = (individual_prediction / prediction_count).round(5)
+      }
+    end
+    
     def to_yaml
       @trees.to_yaml
     end
-    
     
     private
     

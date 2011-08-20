@@ -13,6 +13,7 @@ module Nimbus
     def initialize
       nimbus_exception_handling do
         config.load
+        @forest = nil
       end
     end
     
@@ -23,12 +24,20 @@ module Nimbus
     # * Writes results to output files.
     def run
       nimbus_exception_handling do
+        
         if @config.do_training && @config.load_training_data
-          forest = ::Nimbus::Forest.new @config
-          forest.grow
-          output_random_forest_file(forest)
-          output_training_file_predictions(forest)
+          @forest = ::Nimbus::Forest.new @config
+          @forest.grow
+          output_random_forest_file(@forest)
+          output_training_file_predictions(@forest)
         end
+        
+        if @config.do_testing
+          @forest = @config.load_forest if @config.forest_file
+          @forest.traverse
+          output_testing_set_predictions(@forest)          
+        end
+        
       end
     end
 
@@ -60,7 +69,7 @@ module Nimbus
       Nimbus.error_message "* Nimbus encountered an error! The random forest was not generated *"
       Nimbus.error_message "#{ex.class}: #{ex.message}"
       # if config.trace
-          Nimbus.error_message ex.backtrace.join("\n")
+      #   Nimbus.error_message ex.backtrace.join("\n")
       # else
       #   Nimbus.error_message "(See full error trace by running Nimbus with --trace)"
       # end
@@ -82,6 +91,17 @@ module Nimbus
       }
       Nimbus.message "* Predictions for the training sample saved to:"
       Nimbus.message "*   Output forest file: #{@config.output_training_file}"
+      Nimbus.message "*" * 50
+    end
+    
+    def output_testing_set_predictions(forest)
+      File.open(@config.output_testing_file , 'w') {|f|
+        forest.predictions.sort.each{|p|
+          f.write("#{p[0]} #{p[1]}\n")
+        }
+      }
+      Nimbus.message "* Predictions for the testing set saved to:"
+      Nimbus.message "*   Output forest file: #{@config.output_testing_file}"
       Nimbus.message "*" * 50
     end
     

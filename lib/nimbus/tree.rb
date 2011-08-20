@@ -54,12 +54,10 @@ module Nimbus
       return { snp => [node_0, node_1, node_2] }
     end
     
-    def traverse
-      
-    end
-    
-    def self.traverse(structure, data)
-      
+    def self.traverse(tree_structure, data)
+      return tree_structure if tree_structure.is_a? Numeric
+      raise Nimbus::TreeError, "Forest data has invalid structure. Please check your forest data (file)." if !(tree_structure.is_a?(Hash) && tree_structure.keys.size == 1)
+      return self.traverse( tree_structure.values.first[ data[tree_structure.keys.first].to_i ], data)
     end
     
     

@@ -29,18 +29,29 @@ module Nimbus
     
     # Stops the execution of the Nimbus application.
     def stop(msg = "Error: Nimbus finished.")
-      STDERR.puts msg
+      self.error_message msg
       exit(false)
     end
     
     # Writes message to the standard output
     def message(msg)
       STDOUT.puts msg
+      STDOUT.flush
     end
     
     # Writes message to the error output
     def error_message(msg)
       STDERR.puts msg
+      STDERR.flush
+    end
+    
+    def write(str)
+      STDOUT.write str
+      STDOUT.flush
+    end
+
+    def clear_line!
+      self.write "\r"
     end
     
   end

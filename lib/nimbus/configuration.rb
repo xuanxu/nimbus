@@ -16,7 +16,8 @@ module Nimbus
       :do_testing,
       :training_set,
       :output_forest_file,
-      :output_training_file
+      :output_training_file,
+      :output_testing_file
     )
     
     DEFAULTS = {
@@ -34,8 +35,9 @@ module Nimbus
       :forest_file   => 'forest.yml',
       :config_file   => 'config.yml',
       
-      :output_forest_file => 'random_forest.yml',
-      :output_training_file => 'training_file_predictions.yml'
+      :output_forest_file   => 'random_forest.yml',
+      :output_training_file => 'training_file_predictions.txt',
+      :output_testing_file  => 'testing_file_predictions.txt'
     }
     
     
@@ -51,8 +53,9 @@ module Nimbus
       @loss_function_discrete   = DEFAULTS[:loss_function_discrete]
       @loss_function_continuous = DEFAULTS[:loss_function_continuous]
       
-      @output_forest_file = File.expand_path(DEFAULTS[:output_forest_file], Dir.pwd)
+      @output_forest_file   = File.expand_path(DEFAULTS[:output_forest_file], Dir.pwd)
       @output_training_file = File.expand_path(DEFAULTS[:output_training_file], Dir.pwd)
+      @output_testing_file  = File.expand_path(DEFAULTS[:output_testing_file], Dir.pwd)
     end
     
     def tree
@@ -118,10 +121,31 @@ module Nimbus
       }
     end
     
-    def load_testing_data
+    def read_testing_data
+      File.open(@testing_file) {|file|
+        file.each do |line|
+          next if line.strip == ''
+          data_id, *snp_list = line.strip.split
+          raise Nimbus::InputFileError, "There are individuals with no ID, please check data in Testing file." unless (!data_id.nil? && data_id.strip != '')
+          raise Nimbus::InputFileError, "Individual ##{data_id} from testing set has no value for all #{@tree_SNP_total_count} SNPs, please check structure of the testing file." unless snp_list.size == @tree_SNP_total_count
+          individual_test = Nimbus::Individual.new(data_id.to_i, nil, snp_list.map{|snp| snp.to_i})
+          yield individual_test
+        end
+      }
     end
     
-    def load_forest_data
+    def load_forest
+      trees = []
+      if File.exists?(@forest_file)
+        begin
+          trees = YAML.load(File.open @forest_file)
+        rescue ArgumentError => e
+          raise Nimbus::WrongFormatFileError, "It was not posible to parse the random forest file (#{@forest_file}): \r\n#{e.message} "
+        end
+      end
+      forest = Nimbus::Forest.new self
+      forest.trees = trees
+      forest
     end
     
     def check_configuration
@@ -158,7 +182,7 @@ module Nimbus
       if @do_testing
         Nimbus.message "* Data to be tested:"
         Nimbus.message "*   Testing file: #{@testing_file}"
-        if @forest_file && !@do_training
+        if @forest_file
           Nimbus.message "* using the structure of the random forest stored in:" 
           Nimbus.message "*   Random forest file: #{@forest_file}"
         end
