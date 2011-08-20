@@ -45,11 +45,13 @@ module Nimbus
       STDERR.flush
     end
     
+    # Writes to the standard output
     def write(str)
       STDOUT.write str
       STDOUT.flush
     end
 
+    # Clear current console line
     def clear_line!
       self.write "\r"
     end
