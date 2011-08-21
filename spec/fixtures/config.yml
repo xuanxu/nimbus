@@ -8,5 +8,4 @@ forest:
   forest_size: 10 #how many trees
   SNP_sample_size_mtry: 60 #mtry
   SNP_total_count: 200
-  max_branches: 2000
   node_min_size: 5

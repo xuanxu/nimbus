@@ -8,7 +8,6 @@ module Nimbus
       :forest_size,
       :tree_SNP_sample_size,
       :tree_SNP_total_count,
-      :tree_max_branches,
       :tree_node_min_size,
       :loss_function_discrete,
       :loss_function_continuous,
@@ -24,7 +23,6 @@ module Nimbus
       :forest_size          => 500,
       :tree_SNP_sample_size => 60,
       :tree_SNP_total_count => 200,
-      :tree_max_branches    => 2000,
       :tree_node_min_size   => 5,
       
       :loss_function_discrete   => 'majority_class',
@@ -48,7 +46,6 @@ module Nimbus
       @forest_size              = DEFAULTS[:forest_size]
       @tree_SNP_sample_size     = DEFAULTS[:tree_SNP_sample_size]
       @tree_SNP_total_count     = DEFAULTS[:tree_SNP_total_count]
-      @tree_max_branches        = DEFAULTS[:tree_max_branches]
       @tree_node_min_size       = DEFAULTS[:tree_node_min_size]
       @loss_function_discrete   = DEFAULTS[:loss_function_discrete]
       @loss_function_continuous = DEFAULTS[:loss_function_continuous]
@@ -62,7 +59,6 @@ module Nimbus
       { 
         :snp_sample_size => @tree_SNP_sample_size,
         :snp_total_count => @tree_SNP_total_count,
-        :tree_max_branches => @tree_max_branches,
         :tree_node_min_size => @tree_node_min_size
       }
     end
@@ -98,7 +94,6 @@ module Nimbus
         @forest_size          = user_config_params['forest']['forest_size'].to_i if user_config_params['forest']['forest_size']
         @tree_SNP_total_count = user_config_params['forest']['SNP_total_count'].to_i if user_config_params['forest']['SNP_total_count']
         @tree_SNP_sample_size = user_config_params['forest']['SNP_sample_size_mtry'].to_i  if user_config_params['forest']['SNP_sample_size_mtry']
-        @tree_max_branches    = user_config_params['forest']['max_branches'].to_i  if user_config_params['forest']['max_branches']
         @tree_node_min_size   = user_config_params['forest']['node_min_size'].to_i if user_config_params['forest']['node_min_size']
       end
 
@@ -169,7 +164,6 @@ module Nimbus
       Nimbus.message "*   Forest size: #{@forest_size} trees"
       Nimbus.message "*   Total SNP count: #{@tree_SNP_total_count}"
       Nimbus.message "*   SNPs sample size (mtry): #{@tree_SNP_sample_size}"
-      Nimbus.message "*   Maximum number of branches per tree: #{@tree_max_branches}"
       Nimbus.message "*   Minimun node size in tree: #{@tree_node_min_size}"
       Nimbus.message "*" * 50
       

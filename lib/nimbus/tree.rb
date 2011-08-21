@@ -1,14 +1,13 @@
 module Nimbus
   
   class Tree
-    attr_accessor :snp_sample_size, :snp_total_count, :node_min_size, :max_branches, :structure, :predictions
+    attr_accessor :snp_sample_size, :snp_total_count, :node_min_size, :structure, :predictions
     attr_accessor :individuals, :id_to_fenotype
     
     def initialize(options)
       @snp_total_count = options[:snp_total_count]
       @snp_sample_size = options[:snp_sample_size]
       @node_min_size = options[:tree_node_min_size]
-      @max_branches = options[:tree_max_branches]
     end
     
     def seed(all_individuals, individuals_sample, ids_fenotypes)
