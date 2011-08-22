@@ -1,7 +1,7 @@
 module Nimbus
   
   class Tree
-    attr_accessor :snp_sample_size, :snp_total_count, :node_min_size, :structure, :predictions
+    attr_accessor :snp_sample_size, :snp_total_count, :node_min_size, :structure, :generalization_error, :predictions
     attr_accessor :individuals, :id_to_fenotype
     
     def initialize(options)
@@ -17,6 +17,16 @@ module Nimbus
       
       @structure = build_node individuals_sample, Nimbus::LossFunctions.average(individuals_sample, @id_to_fenotype)
     end
+    
+    def generalization_error_from_oob(oob_ids)
+      return nil if (@structure.nil? || @individuals.nil? || @id_to_fenotype.nil?)
+      oob_y_hat = Nimbus::LossFunctions.average(oob_ids, @id_to_fenotype)
+      oob_predictions = {}
+      oob_ids.each do |oobi|
+        oob_predictions[oobi] = Tree.traverse @structure, individuals[oobi].snp_list
+      end
+      @generalization_error = Nimbus::LossFunctions.quadratic_loss oob_ids, oob_predictions, oob_y_hat
+    end
 
     def build_node(individuals_ids, y_hat)
       # General loss function value for the node
@@ -26,7 +36,7 @@ module Nimbus
       
       # Finding the SNP that minimizes loss function
       snps = snps_random_sample
-      min_loss, min_SNP, split, means  = node_loss_function, nil, nil, nil
+      min_loss, min_SNP, split, means = node_loss_function, nil, nil, nil
 
       snps.each do |snp|
         individuals_split_by_snp_value = split_by_snp_value individuals_ids, snp

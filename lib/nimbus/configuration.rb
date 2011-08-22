@@ -16,7 +16,8 @@ module Nimbus
       :training_set,
       :output_forest_file,
       :output_training_file,
-      :output_testing_file
+      :output_testing_file,
+      :output_tree_errors_file
     )
     
     DEFAULTS = {
@@ -35,7 +36,8 @@ module Nimbus
       
       :output_forest_file   => 'random_forest.yml',
       :output_training_file => 'training_file_predictions.txt',
-      :output_testing_file  => 'testing_file_predictions.txt'
+      :output_testing_file  => 'testing_file_predictions.txt',
+      :output_tree_errors_file => 'generalization_errors.txt'
     }
     
     
@@ -53,6 +55,7 @@ module Nimbus
       @output_forest_file   = File.expand_path(DEFAULTS[:output_forest_file], Dir.pwd)
       @output_training_file = File.expand_path(DEFAULTS[:output_training_file], Dir.pwd)
       @output_testing_file  = File.expand_path(DEFAULTS[:output_testing_file], Dir.pwd)
+      @output_tree_errors_file  = File.expand_path(DEFAULTS[:output_tree_errors_file], Dir.pwd)
     end
     
     def tree

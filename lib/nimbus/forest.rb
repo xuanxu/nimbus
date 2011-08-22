@@ -1,11 +1,12 @@
 module Nimbus
   
   class Forest
-    attr_accessor :size, :trees, :bag, :predictions
+    attr_accessor :size, :trees, :bag, :predictions, :tree_errors
     attr_accessor :options
     
     def initialize(config)
       @trees = []
+      @tree_errors = []
       @options = config
       @size = config.forest_size
       @predictions = {}
@@ -20,6 +21,7 @@ module Nimbus
         tree_out_of_bag = oob tree_individuals_bag
         tree = Tree.new @options.tree
         @trees << tree.seed(@options.training_set.individuals, tree_individuals_bag, @options.training_set.ids_fenotypes)
+        @tree_errors << tree.generalization_error_from_oob(tree_out_of_bag)
         acumulate_predictions tree.predictions
         Nimbus.clear_line!
       end
@@ -30,7 +32,7 @@ module Nimbus
       @predictions = {}
       prediction_count = trees.size
       @options.read_testing_data{|individual|
-        individual_prediction=0.0
+        individual_prediction = 0.0
         trees.each do |t|
           individual_prediction = (individual_prediction + Nimbus::Tree.traverse(t, individual.snp_list)).round(5)
         end

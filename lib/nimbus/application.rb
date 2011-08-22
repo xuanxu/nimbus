@@ -29,6 +29,7 @@ module Nimbus
           @forest = ::Nimbus::Forest.new @config
           @forest.grow
           output_random_forest_file(@forest)
+          output_tree_errors_file(@forest)
           output_training_file_predictions(@forest)
         end
         
@@ -80,6 +81,17 @@ module Nimbus
       File.open(@config.output_forest_file , 'w') {|f| f.write(forest.to_yaml) }
       Nimbus.message "* Random forest structure saved to:"
       Nimbus.message "*   Output forest file: #{@config.output_forest_file}"
+      Nimbus.message "*" * 50
+    end
+    
+    def output_tree_errors_file(forest)
+      File.open(@config.output_tree_errors_file , 'w') {|f| 
+        1.upto(forest.tree_errors.size) do |te|
+          f.write("generalization error for tree ##{te}: #{forest.tree_errors[te-1].round(5)}\n")
+        end
+      }
+      Nimbus.message "* Generalization errors for every tree saved to:"
+      Nimbus.message "*   Output tree errors file: #{@config.output_tree_errors_file}"
       Nimbus.message "*" * 50
     end
     
