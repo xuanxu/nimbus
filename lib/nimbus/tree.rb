@@ -1,7 +1,7 @@
 module Nimbus
   
   class Tree
-    attr_accessor :snp_sample_size, :snp_total_count, :node_min_size, :structure, :generalization_error, :predictions
+    attr_accessor :snp_sample_size, :snp_total_count, :node_min_size, :used_snps, :structure, :generalization_error, :predictions, :importances
     attr_accessor :individuals, :id_to_fenotype
     
     def initialize(options)
@@ -14,18 +14,9 @@ module Nimbus
       @individuals = all_individuals
       @id_to_fenotype = ids_fenotypes
       @predictions = {}
+      @used_snps = []
       
       @structure = build_node individuals_sample, Nimbus::LossFunctions.average(individuals_sample, @id_to_fenotype)
-    end
-    
-    def generalization_error_from_oob(oob_ids)
-      return nil if (@structure.nil? || @individuals.nil? || @id_to_fenotype.nil?)
-      oob_y_hat = Nimbus::LossFunctions.average(oob_ids, @id_to_fenotype)
-      oob_predictions = {}
-      oob_ids.each do |oobi|
-        oob_predictions[oobi] = Tree.traverse @structure, individuals[oobi].snp_list
-      end
-      @generalization_error = Nimbus::LossFunctions.quadratic_loss oob_ids, oob_predictions, oob_y_hat
     end
 
     def build_node(individuals_ids, y_hat)
@@ -60,13 +51,46 @@ module Nimbus
       node_1 = split[1].size == 0 ? label_node(parent_y_hat, []) : build_node(split[1], y_hats[1])
       node_2 = split[2].size == 0 ? label_node(parent_y_hat, []) : build_node(split[2], y_hats[2])
       
+      split_by_snp(snp)
       return { snp => [node_0, node_1, node_2] }
+    end
+
+    def generalization_error_from_oob(oob_ids)
+      return nil if (@structure.nil? || @individuals.nil? || @id_to_fenotype.nil?)
+      oob_y_hat = Nimbus::LossFunctions.average(oob_ids, @id_to_fenotype)
+      oob_predictions = {}
+      oob_ids.each do |oobi|
+        oob_predictions[oobi] = Tree.traverse @structure, individuals[oobi].snp_list
+      end
+      @generalization_error = Nimbus::LossFunctions.quadratic_loss oob_ids, oob_predictions, oob_y_hat
+    end
+
+    def estimate_importances(oob_ids)
+      return nil if (@generalization_error.nil? && generalization_error_from_oob(oob_ids))
+      oob_individuals_count = oob_ids.size
+      @importances = {}
+      @used_snps.uniq.each do |current_snp|
+        shuffled_ids = oob_ids.shuffle
+        permutated_snp_error = 0.0
+        oob_ids.each_with_index {|oobi, index|
+          permutated_prediction = traverse_with_permutation @structure, individuals[oobi].snp_list, current_snp, individuals[shuffled_ids[index]].snp_list
+          permutated_snp_error += Nimbus::LossFunctions.mean_squared_error [oobi], @id_to_fenotype, permutated_prediction
+        }
+        @importances[current_snp] = ((permutated_snp_error / oob_individuals_count) - @generalization_error).round(5)
+      end
+      @importances
     end
     
     def self.traverse(tree_structure, data)
       return tree_structure if tree_structure.is_a? Numeric
       raise Nimbus::TreeError, "Forest data has invalid structure. Please check your forest data (file)." if !(tree_structure.is_a?(Hash) && tree_structure.keys.size == 1)
       return self.traverse( tree_structure.values.first[ data[tree_structure.keys.first - 1].to_i], data)
+    end
+    
+    def traverse_with_permutation(tree_structure, data, snp_to_permute, individual_to_permute)
+      return tree_structure if tree_structure.is_a? Numeric
+      individual_data = (tree_structure.keys.first == snp_to_permute ? individual_to_permute : data)
+      return traverse_with_permutation( tree_structure.values.first[ individual_data[tree_structure.keys.first - 1].to_i], data, snp_to_permute, individual_to_permute)
     end
     
     
@@ -90,6 +114,10 @@ module Nimbus
       split
     rescue => ex
       raise Nimbus::TreeError, "Values for SNPs columns must be in [0, 1, 2]"
+    end
+    
+    def split_by_snp(x)
+      @used_snps << x
     end
     
   end

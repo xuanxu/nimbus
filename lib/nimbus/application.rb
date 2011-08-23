@@ -31,6 +31,7 @@ module Nimbus
           output_random_forest_file(@forest)
           output_tree_errors_file(@forest)
           output_training_file_predictions(@forest)
+          output_snp_importances_file(@forest)
         end
         
         if @config.do_testing
@@ -102,7 +103,7 @@ module Nimbus
         }
       }
       Nimbus.message "* Predictions for the training sample saved to:"
-      Nimbus.message "*   Output forest file: #{@config.output_training_file}"
+      Nimbus.message "*   Output from training file: #{@config.output_training_file}"
       Nimbus.message "*" * 50
     end
     
@@ -113,7 +114,18 @@ module Nimbus
         }
       }
       Nimbus.message "* Predictions for the testing set saved to:"
-      Nimbus.message "*   Output forest file: #{@config.output_testing_file}"
+      Nimbus.message "*   Output from testing file: #{@config.output_testing_file}"
+      Nimbus.message "*" * 50
+    end
+    
+    def output_snp_importances_file(forest)
+      File.open(@config.output_snp_importances_file , 'w') {|f|
+        forest.snp_importances.sort.each{|p|
+          f.write("SNP ##{p[0]}: #{p[1].round(5)}\n")
+        }
+      }
+      Nimbus.message "* SNP importances for the forest saved to:"
+      Nimbus.message "*   Output snp importance file: #{@config.output_snp_importances_file}"
       Nimbus.message "*" * 50
     end
     

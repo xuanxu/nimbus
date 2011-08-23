@@ -1,7 +1,7 @@
 module Nimbus
   
   class Forest
-    attr_accessor :size, :trees, :bag, :predictions, :tree_errors
+    attr_accessor :size, :trees, :bag, :predictions, :tree_errors, :snp_importances
     attr_accessor :options
     
     def initialize(config)
@@ -10,7 +10,9 @@ module Nimbus
       @options = config
       @size = config.forest_size
       @predictions = {}
-      @times_predicted =[]
+      @times_predicted = []
+      @snp_importances = {}
+      @tree_snp_importances = []
       raise Nimbus::ForestError, "Forest size parameter (#{@size}) is invalid. You need at least one tree." if @size < 1
     end
     
@@ -22,9 +24,11 @@ module Nimbus
         tree = Tree.new @options.tree
         @trees << tree.seed(@options.training_set.individuals, tree_individuals_bag, @options.training_set.ids_fenotypes)
         @tree_errors << tree.generalization_error_from_oob(tree_out_of_bag)
+        @tree_snp_importances << tree.estimate_importances(tree_out_of_bag)        
         acumulate_predictions tree.predictions
         Nimbus.clear_line!
       end
+      average_snp_importances
       average_predictions
     end
     
@@ -73,6 +77,16 @@ module Nimbus
     def average_predictions
       @predictions.each_pair{|id, value|
         @predictions[id] = (@predictions[id] / @times_predicted[id]).round(5)
+      }
+    end
+    
+    def average_snp_importances
+      1.upto(@options.tree_SNP_total_count) {|snp|
+        @snp_importances[snp] = 0.0
+        @tree_snp_importances.each{|tree_snp_importance|
+          @snp_importances[snp] += tree_snp_importance[snp] unless tree_snp_importance[snp].nil?
+        }
+        @snp_importances[snp] = @snp_importances[snp] / @size
       }
     end
     
