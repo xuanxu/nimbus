@@ -3,7 +3,9 @@ Random Forest algorithm for genomic selection.
 
 ## Random Forest
 
-The [random forest algorithm](http://en.wikipedia.org/wiki/Random_forest) is an classifier consisting in many random decision trees. In machine learning terms, it is an ensembler classifier, so it uses multiple models to obtain better predictive performance than could be obtained from any of the constituent models. The forest outputs the class that is the mean or the mode (in regression problems) or the majority class (in classification problems) of the node's output by individual trees.
+The [random forest algorithm](http://en.wikipedia.org/wiki/Random_forest) is an classifier consisting in many random decision trees. It is based on choosing random subsets of variables for each tree and using the most frequent, or the averaged tree output as the overall classification. In machine learning terms, it is an ensembler classifier, so it uses multiple models to obtain better predictive performance than could be obtained from any of the constituent models.
+
+The forest outputs the class that is the mean or the mode (in regression problems) or the majority class (in classification problems) of the node's output by individual trees.
 
 ## Genomic selection context
 
@@ -118,6 +120,9 @@ After testing:
 
 * [Source code](http://github.com/xuanxu/nimbus) – Fork the code
 * [Issues](http://github.com/xuanxu/nimbus/issues) – Bugs and feature requests
+* [Online rdocs](http://rubydoc.info/gems/nimbus/frames)
+* [Nimbus at rubygems.org](https://rubygems.org/gems/nimbus)
+* [Random Forest at Wikipedia](http://en.wikipedia.org/wiki/Random_forest)
 * [RF Leo Breiman page](http://www.stat.berkeley.edu/~breiman/RandomForests/)
 
 ## Credits
