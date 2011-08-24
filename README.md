@@ -11,7 +11,7 @@ Nimbus is a Ruby gem implementing Random Forest in a genomic selection context, 
 
 Other than the ids of the individuals, Nimbus handle the data as genotype values for [single-nucleotide polymorphisms](http://en.wikipedia.org/wiki/SNPs) (SNPs), so the variables in the classifier must have values of 0, 1 or 2, corresponding with SNPs classes of AA, AB and BB.
 
-you can use nimbus to:
+Nimbus can be used to:
 
 * Create a random forest using a training sample of individuals with fenotype data.
 * Use an existent random forest to get predictions for a testing sample.
@@ -31,7 +31,7 @@ you can use nimbus to:
 
 ## Install
 
-You need to have Ruby (1.9.2 and higher) and Rubygems installed in your computer. Then install nimbus with:
+You need to have Ruby (1.9.2 or higher) and Rubygems installed in your computer. Then install nimbus with:
 
   $ gem install nimbus
   
@@ -55,18 +55,18 @@ The values for the input data files and the forest can be specified in the `conf
 
 The `config.yml` has the following structure and parameters:
 
-  #Input files
-  input:
-    training: training_regression.data
-    testing: testing_regression.data
-    forest: my_forest.yml
+    #Input files
+    input:
+      training: training_regression.data
+      testing: testing_regression.data
+      forest: my_forest.yml
     
-  #Forest parameters
-  forest:
-    forest_size: 10 #how many trees
-    SNP_sample_size_mtry: 60 #mtry
-    SNP_total_count: 200
-    node_min_size: 5
+    #Forest parameters
+    forest:
+      forest_size: 10 #how many trees
+      SNP_sample_size_mtry: 60 #mtry
+      SNP_total_count: 200
+      node_min_size: 5
     
 Under the input chapter:
 
@@ -87,13 +87,15 @@ Under the forest chapter:
 The three input files you can use with Nimbus should have proper format:
 
 **The training file** has any number of rows, each representing data for an individual, with this columns:
+
 1. A column with the fenotype for the individual
 1. A column with the ID of the individual
-1  M columns (where M = SNP_total_count in `config.yml`) with values 0, 1 or 2, representing the genotype of the individual.
+1. M columns (where M = SNP_total_count in `config.yml`) with values 0, 1 or 2, representing the genotype of the individual.
 
 **The training file** has any number of rows, each representing data for an individual, similar to the training file but without the fenotype column:
+
 1. A column with the ID of the individual
-1  M columns (where M = SNP_total_count in `config.yml`) with values 0, 1 or 2, representing the genotype of the individual.
+1. M columns (where M = SNP_total_count in `config.yml`) with values 0, 1 or 2, representing the genotype of the individual.
 
 **The forest file** contains the structure of a forest in YAML format. It is the output file of a nimbus training run.
 
