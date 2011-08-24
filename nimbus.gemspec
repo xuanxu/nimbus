@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'nimbus'
-  s.version = "0.9"
+  s.version = "0.10"
   s.platform = Gem::Platform::RUBY
   s.date = Time.now.strftime('%Y-%m-%d')
   
