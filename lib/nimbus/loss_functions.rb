@@ -16,6 +16,10 @@ module Nimbus
         self.mean_squared_error(ids, value_table, mean) / ids.size
       end
       
+      def squared_difference(x,y)
+        0.0 + (x-y)**2
+      end
+      
     end
     
   end

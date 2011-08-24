@@ -57,12 +57,12 @@ module Nimbus
 
     def generalization_error_from_oob(oob_ids)
       return nil if (@structure.nil? || @individuals.nil? || @id_to_fenotype.nil?)
-      oob_y_hat = Nimbus::LossFunctions.average(oob_ids, @id_to_fenotype)
-      oob_predictions = {}
+      oob_errors = {}
       oob_ids.each do |oobi|
-        oob_predictions[oobi] = Tree.traverse @structure, individuals[oobi].snp_list
+        oob_prediction = Tree.traverse @structure, individuals[oobi].snp_list
+        oob_errors[oobi] = Nimbus::LossFunctions.squared_difference oob_prediction, @id_to_fenotype[oobi]
       end
-      @generalization_error = Nimbus::LossFunctions.quadratic_loss oob_ids, oob_predictions, oob_y_hat
+      @generalization_error = Nimbus::LossFunctions.average oob_ids, oob_errors
     end
 
     def estimate_importances(oob_ids)
@@ -74,7 +74,7 @@ module Nimbus
         permutated_snp_error = 0.0
         oob_ids.each_with_index {|oobi, index|
           permutated_prediction = traverse_with_permutation @structure, individuals[oobi].snp_list, current_snp, individuals[shuffled_ids[index]].snp_list
-          permutated_snp_error += Nimbus::LossFunctions.mean_squared_error [oobi], @id_to_fenotype, permutated_prediction
+          permutated_snp_error += Nimbus::LossFunctions.squared_difference @id_to_fenotype[oobi], permutated_prediction
         }
         @importances[current_snp] = ((permutated_snp_error / oob_individuals_count) - @generalization_error).round(5)
       end
