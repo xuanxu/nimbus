@@ -1,15 +1,16 @@
 module Nimbus
   
   #####################################################################
-  # Nimbus main application object. When invoking +nimbus+ from the
-  # command line, a Nimbus::Application object is created and run.
+  # Nimbus main application object. 
+  # 
+  # When invoking +nimbus+ from the command line, 
+  # a Nimbus::Application object is created and run.
   #
   class Application
     attr_accessor :config
     
     # Initialize a Nimbus::Application object.
     # Check and load the configuration options.
-    #
     def initialize
       nimbus_exception_handling do
         config.load
@@ -18,10 +19,11 @@ module Nimbus
     end
     
     # Run the Nimbus application. The run method performs the following
-    # two steps:
+    # three steps:
     #
-    # * Creates a Nimbus::Forest object.
-    # * Writes results to output files.
+    # * Create a Nimbus::Forest object.
+    # * Decide action to take: training a random forest and/or use the forest to predict values for a testing set
+    # * Write results to output files.
     def run
       nimbus_exception_handling do
         
@@ -44,6 +46,8 @@ module Nimbus
     end
 
     # Creates an instance of Nimbus::Configuration if it does not exist.
+    # This config object contains every option to be used for the random forest
+    # including the user input set through the config.yml file.
     def config
       @config ||= ::Nimbus::Configuration.new
     end

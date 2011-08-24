@@ -1,4 +1,15 @@
 module Nimbus
+  #####################################################################
+  # Nimbus configuration object. 
+  # 
+  # This class reads every user file.
+  # Once the user's config.yml file is loaded, a set of default and 
+  # custom options is created and stored.
+  # 
+  # Nimbus::Configuration also reads the testing files and the data 
+  # to create the training set to be passed to the Nimbus::Forest random
+  # forest generator and the Nimbus::Tree classes in it.
+  #
   class Configuration
     attr_accessor(
       :training_file,
@@ -42,7 +53,9 @@ module Nimbus
       :output_snp_importances_file => 'snp_importances.txt'
     }
     
-    
+    # Initialize a Nimbus::Configuration object.
+    #
+    # Set all options to their default values.
     def initialize
       @do_training = false
       @do_testing  = false
@@ -61,6 +74,7 @@ module Nimbus
       @output_snp_importances_file = File.expand_path(DEFAULTS[:output_snp_importances_file], Dir.pwd)
     end
     
+    # Accessor method for the tree-related subset of options.
     def tree
       { 
         :snp_sample_size => @tree_SNP_sample_size,
@@ -69,6 +83,16 @@ module Nimbus
       }
     end
     
+    # This is the first method to be called on Configuration when a config.yml file
+    # exists with user input options for the forest.
+    # 
+    # * The method will read the config file and change the default value of the selected options.
+    # * Then based on the options and the existence of training, testing and forest files, it will mark:
+    #   - if training is needed,
+    #   - if testing is needed,
+    #   - which forest will be used for the testing.
+    # * Finally it will run basic checks on the input data trying to prevent future program errors.
+    #
     def load(config_file = DEFAULTS[:config_file])
       user_config_params = {}
       if File.exists?(File.expand_path(config_file, Dir.pwd))
@@ -107,6 +131,8 @@ module Nimbus
       log_configuration
     end
     
+    # The method reads the training file, and if the data is valid, creates a Nimbus::TrainingSet
+    # containing every individual to be used as training sample for a random forest.
     def load_training_data
       File.open(@training_file) {|file|
         @training_set = Nimbus::TrainingSet.new({}, {})
@@ -122,6 +148,7 @@ module Nimbus
       }
     end
     
+    # Reads the testing file, and if the data is valid, yields one Nimbus::Individual at a time.
     def read_testing_data
       File.open(@testing_file) {|file|
         file.each do |line|
@@ -135,6 +162,9 @@ module Nimbus
       }
     end
     
+    # Creates a Nimbus::Forest object from a user defined random forest data file.
+    #
+    # The format of the input file should be the same as the forest output data of a Nimbus Application.
     def load_forest
       trees = []
       if File.exists?(@forest_file)
@@ -149,10 +179,16 @@ module Nimbus
       forest
     end
     
+    # Include tests to be passed by the info contained in the config file.
+    #
+    # If some of the configuration data provided by the user is invalid, an error is raised and execution stops.
     def check_configuration
       raise Nimbus::ConfigurationError, "The mtry sample size must be smaller than the total SNPs count." if @tree_SNP_sample_size > @tree_SNP_total_count
     end
     
+    # Prints the information stored in the Nimbus::Configuration object
+    #
+    # It could include errors on the configuration input data, training related info and/or testing related info.
     def log_configuration
       if !@do_training && !@do_testing
         Nimbus.message "*" * 50

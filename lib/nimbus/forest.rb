@@ -1,9 +1,14 @@
 module Nimbus
-  
+
+  #####################################################################
+  # Forest represents the Random forest being generated 
+  # (or used to test samples) by the application object.
+  #
   class Forest
     attr_accessor :size, :trees, :bag, :predictions, :tree_errors, :snp_importances
     attr_accessor :options
     
+    # Initialize Forest object with options included in the Nimbus::Configuration object received.
     def initialize(config)
       @trees = []
       @tree_errors = []
@@ -16,6 +21,18 @@ module Nimbus
       raise Nimbus::ForestError, "Forest size parameter (#{@size}) is invalid. You need at least one tree." if @size < 1
     end
     
+    # Creates a random forest based on the TrainingSet included in the configuration, creating N random trees (size N defined in the configuration).
+    #
+    # This is the method called when the application's configuration flags training on.
+    #
+    # It performs this tasks:
+    #
+    # * grow the forest (all the N random trees)
+    # * store generalization errors for every tree
+    # * obtain averaged importances for all the SNPs
+    # * calculate averaged predictions for all individuals in the training sample
+    #
+    # Every tree of the forest is created with a different random sample of the individuals in the training set.
     def grow
       @size.times do |i|
         Nimbus.write("Creating trees: #{i+1}/#{@size} ")
@@ -32,6 +49,9 @@ module Nimbus
       average_predictions
     end
     
+    # Traverse a testing set through every tree of the forest and get averaged predictions for every individual in the sample.
+    #
+    # This is the method called when the application's configuration flags testing on.
     def traverse
       @predictions = {}
       prediction_count = trees.size
@@ -44,6 +64,7 @@ module Nimbus
       }
     end
     
+    # The array containing every tree in the forest, to YAML format.
     def to_yaml
       @trees.to_yaml
     end

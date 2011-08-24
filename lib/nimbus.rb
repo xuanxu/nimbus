@@ -9,6 +9,11 @@ require 'nimbus/tree'
 require 'nimbus/forest'
 require 'nimbus/application'
 
+#####################################################################
+# Nimbus module. 
+# Used as a namespace containing all the Nimbus code.
+# The module defines a Nimbus::Application and interacts with the user output console.
+#
 module Nimbus
   
   STDERR = $stderr
