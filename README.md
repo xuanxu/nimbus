@@ -33,13 +33,13 @@ Nimbus can be used to:
 
 You need to have Ruby (1.9.2 or higher) and Rubygems installed in your computer. Then install nimbus with:
 
-  $ gem install nimbus
+    $ gem install nimbus
   
 ## Getting Started
 
 Once you have nimbus installed in your system, you can run the gem using the `nimbus` executable:
 
-  $ nimbus
+    $ nimbus
 
 It will look for these files: 
 
@@ -76,10 +76,10 @@ Under the input chapter:
  
 Under the forest chapter:
  
- * forest_size: number of trees for the forest.
- * SNP_sample_size_mtry: size of the random sample of SNPs to be used in every tree node.
- * SNP_total_count: total count of SNPs in the training and/or testing files
- * node_min_size: minimum amount of individuals in a tree node to make a split.
+ * `forest_size`: number of trees for the forest.
+ * `SNP_sample_size_mtry`: size of the random sample of SNPs to be used in every tree node.
+ * `SNP_total_count`: total count of SNPs in the training and/or testing files
+ * `node_min_size`: minimum amount of individuals in a tree node to make a split.
     
     
 ## Input files
