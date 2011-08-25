@@ -11,7 +11,8 @@ module Nimbus
     
     # Initialize a Nimbus::Application object.
     # Check and load the configuration options.
-    def initialize
+    def initialize(c = nil)
+      @config = c unless c.nil?
       nimbus_exception_handling do
         config.load
         @forest = nil

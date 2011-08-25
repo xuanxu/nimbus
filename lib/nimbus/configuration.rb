@@ -29,7 +29,8 @@ module Nimbus
       :output_training_file,
       :output_testing_file,
       :output_tree_errors_file,
-      :output_snp_importances_file
+      :output_snp_importances_file,
+      :silent
     )
     
     DEFAULTS = {
@@ -50,7 +51,9 @@ module Nimbus
       :output_training_file => 'training_file_predictions.txt',
       :output_testing_file  => 'testing_file_predictions.txt',
       :output_tree_errors_file => 'generalization_errors.txt',
-      :output_snp_importances_file => 'snp_importances.txt'
+      :output_snp_importances_file => 'snp_importances.txt',
+      
+      :silent => false
     }
     
     # Initialize a Nimbus::Configuration object.
@@ -72,6 +75,8 @@ module Nimbus
       @output_testing_file  = File.expand_path(DEFAULTS[:output_testing_file], Dir.pwd)
       @output_tree_errors_file  = File.expand_path(DEFAULTS[:output_tree_errors_file], Dir.pwd)
       @output_snp_importances_file = File.expand_path(DEFAULTS[:output_snp_importances_file], Dir.pwd)
+      
+      @silent = ENV['nimbus_test'] == 'running_nimbus_tests' ? true : DEFAULTS[:silent]
     end
     
     # Accessor method for the tree-related subset of options.
@@ -190,6 +195,7 @@ module Nimbus
     #
     # It could include errors on the configuration input data, training related info and/or testing related info.
     def log_configuration
+      return if @silent
       if !@do_training && !@do_testing
         Nimbus.message "*" * 50
         Nimbus.message "* Nimbus could not find any input file: "
