@@ -100,18 +100,21 @@ module Nimbus
     #
     def load(config_file = DEFAULTS[:config_file])
       user_config_params = {}
+      dirname = Dir.pwd
       if File.exists?(File.expand_path(config_file, Dir.pwd))
         begin
-          user_config_params = YAML.load(File.open(File.expand_path config_file, Dir.pwd))
+          config_file_path = File.expand_path config_file, Dir.pwd
+          user_config_params = YAML.load(File.open(config_file_path))
+          dirname = File.dirname config_file_path
         rescue ArgumentError => e
           raise Nimbus::WrongFormatFileError, "It was not posible to parse the config file (#{config_file}): \r\n#{e.message} "
         end
       end
       
       if user_config_params['input']
-        @training_file = File.expand_path(user_config_params['input']['training'], Dir.pwd) if user_config_params['input']['training']
-        @testing_file  = File.expand_path(user_config_params['input']['testing' ], Dir.pwd) if user_config_params['input']['testing']
-        @forest_file   = File.expand_path(user_config_params['input']['forest'  ], Dir.pwd) if user_config_params['input']['forest']
+        @training_file = File.expand_path(user_config_params['input']['training'], dirname) if user_config_params['input']['training']
+        @testing_file  = File.expand_path(user_config_params['input']['testing' ], dirname) if user_config_params['input']['testing']
+        @forest_file   = File.expand_path(user_config_params['input']['forest'  ], dirname) if user_config_params['input']['forest']
       else
         @training_file = File.expand_path(DEFAULTS[:training_file], Dir.pwd) if File.exists? File.expand_path(DEFAULTS[:training_file], Dir.pwd)
         @testing_file  = File.expand_path(DEFAULTS[:testing_file ], Dir.pwd) if File.exists? File.expand_path(DEFAULTS[:testing_file ], Dir.pwd)
