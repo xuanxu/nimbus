@@ -96,7 +96,7 @@ module Nimbus
     #
     # This method computes importance estimations for every SNPs used in the tree (for any other SNP it would be 0).
     def estimate_importances(oob_ids)
-      return nil if (@generalization_error.nil? && generalization_error_from_oob(oob_ids))
+      return nil if (@generalization_error.nil? && generalization_error_from_oob(oob_ids).nil?)
       oob_individuals_count = oob_ids.size
       @importances = {}
       @used_snps.uniq.each do |current_snp|
