@@ -1,0 +1,12 @@
+#Input files
+input:
+  training: regression_training.data
+  testing:  regression_testing.data
+  forest:   regression_random_forest.yml
+
+#Forest parameters
+forest:
+  forest_size: 3 #how many trees
+  SNP_sample_size_mtry: 60 #mtry
+  SNP_total_count: 200
+  node_min_size: 5
