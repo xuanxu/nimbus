@@ -93,7 +93,7 @@ module Nimbus
     def output_tree_errors_file(forest)
       File.open(@config.output_tree_errors_file , 'w') {|f| 
         1.upto(forest.tree_errors.size) do |te|
-          f.write("generalization error for tree ##{te}: #{forest.tree_errors[te-1].round(5)}\n")
+          f.write("generalization error for tree #{te}: #{forest.tree_errors[te-1].round(5)}\n")
         end
       }
       Nimbus.message "* Generalization errors for every tree saved to:"
@@ -126,7 +126,7 @@ module Nimbus
     def output_snp_importances_file(forest)
       File.open(@config.output_snp_importances_file , 'w') {|f|
         forest.snp_importances.sort.each{|p|
-          f.write("SNP ##{p[0]}: #{p[1].round(5)}\n")
+          f.write("SNP #{p[0]}: #{p[1].round(5)}\n")
         }
       }
       Nimbus.message "* SNP importances for the forest saved to:"

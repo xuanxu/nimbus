@@ -41,7 +41,7 @@ module Nimbus
         tree = Tree.new @options.tree
         @trees << tree.seed(@options.training_set.individuals, tree_individuals_bag, @options.training_set.ids_fenotypes)
         @tree_errors << tree.generalization_error_from_oob(tree_out_of_bag)
-        @tree_snp_importances << tree.estimate_importances(tree_out_of_bag)        
+        @tree_snp_importances << tree.estimate_importances(tree_out_of_bag)
         acumulate_predictions tree.predictions
         Nimbus.clear_line!
       end
