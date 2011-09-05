@@ -8,6 +8,7 @@ require 'nimbus/individual'
 require 'nimbus/tree'
 require 'nimbus/forest'
 require 'nimbus/application'
+require 'nimbus/version'
 
 #####################################################################
 # Nimbus module. 
