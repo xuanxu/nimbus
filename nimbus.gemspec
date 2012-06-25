@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
   s.rdoc_options = ['--main', 'README.rdoc', '--charset=UTF-8']
   
-  s.files = %w(MIT-LICENSE.txt README.rdoc) + Dir.glob("{spec,lib/**/*}") & `git ls-files -z`.split("\0")
+  s.files = %w(MIT-LICENSE.txt README.md) + Dir.glob("{spec,lib/**/*}") & `git ls-files -z`.split("\0")
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
