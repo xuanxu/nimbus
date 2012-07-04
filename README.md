@@ -1,4 +1,4 @@
-# Nimbus
+# Nimbus [![Build Status](https://secure.travis-ci.org/xuanxu/nimbus.png?branch=master)](http://travis-ci.org/xuanxu/nimbus)
 Random Forest algorithm for genomic selection.
 
 ## Random Forest
