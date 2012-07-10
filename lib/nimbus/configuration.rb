@@ -211,7 +211,8 @@ module Nimbus
       end
 
       Nimbus.message "*" * 50
-      Nimbus.message "* Nimbus configured with the following parameters: "
+      Nimbus.message "* Nimbus version #{::Nimbus::VERSION}"
+      Nimbus.message "* configured with the following parameters: "
       Nimbus.message "*   Forest size: #{@forest_size} trees"
       Nimbus.message "*   Total SNP count: #{@tree_SNP_total_count}"
       Nimbus.message "*   SNPs sample size (mtry): #{@tree_SNP_sample_size}"
