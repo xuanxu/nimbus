@@ -36,14 +36,14 @@ Nimbus can be used to:
 You need to have Ruby (1.9.2 or higher) and Rubygems installed in your computer. Then install nimbus with:
 
     $ gem install nimbus
-  
+
 ## Getting Started
 
 Once you have nimbus installed in your system, you can run the gem using the `nimbus` executable:
 
     $ nimbus
 
-It will look for these files: 
+It will look for these files:
 
 * `training.data`: If found it will be used to build a random forest
 * `testing.data` : If found it will be pushed down the forest to obtain predictions for every individual in the file
@@ -62,28 +62,28 @@ The `config.yml` has the following structure and parameters:
       training: training_regression.data
       testing: testing_regression.data
       forest: my_forest.yml
-    
+
     #Forest parameters
     forest:
       forest_size: 10 #how many trees
       SNP_sample_size_mtry: 60 #mtry
       SNP_total_count: 200
       node_min_size: 5
-    
+
 Under the input chapter:
 
  * `training`: specify the path to the training data file (optional, if specified `nimbus` will create a random forest).
  * `testing`: specify the path to the testing data file (optional, if specified `nimbus` will traverse this dat through a random forest).
  * `forest`: specify the path to a file containing a random forest structure (optional, if there is also testing file, this will be the forest used for the testing).
- 
+
 Under the forest chapter:
- 
+
  * `forest_size`: number of trees for the forest.
  * `SNP_sample_size_mtry`: size of the random sample of SNPs to be used in every tree node.
  * `SNP_total_count`: total count of SNPs in the training and/or testing files
  * `node_min_size`: minimum amount of individuals in a tree node to make a split.
-    
-    
+
+
 ## Input files
 
 The three input files you can use with Nimbus should have proper format:

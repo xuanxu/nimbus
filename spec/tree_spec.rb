@@ -2,40 +2,40 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe Nimbus::Tree do
-  
+
   before(:each) do
     @config = Nimbus::Configuration.new
     @config.load fixture_file('regression_config.yml')
-    
+
     @tree = Nimbus::Tree.new @config.tree
   end
-  
+
   it "is initialized with tree config info" do
     @tree.snp_total_count.should == 200
     @tree.snp_sample_size.should == 60
     @tree.node_min_size.should   == 5
   end
-  
+
   it "creates a tree structure when seeded with training data" do
     @config.load_training_data
     @tree.structure.should be_nil
     @tree.seed(@config.training_set.individuals, @config.training_set.all_ids, @config.training_set.ids_fenotypes)
     @tree.structure.should_not be_nil
     @tree.structure.should be_kind_of Hash
-    
+
     @tree.structure.keys.first.should == @tree.used_snps.last
     @tree.used_snps.should_not be_empty
   end
-  
+
   it "split node in three when building a node and finds a suitable split" do
     @config.load_training_data
     @tree.stub!(:snps_random_sample).and_return((141..200).to_a) #189 is best split
-    
+
     @tree.individuals = @config.training_set.individuals
     @tree.id_to_fenotype = @config.training_set.ids_fenotypes
     @tree.used_snps = []
     @tree.predictions = {}
-    
+
     branch = @tree.build_node @config.training_set.all_ids, Nimbus::LossFunctions.average(@config.training_set.all_ids, @config.training_set.ids_fenotypes)
     branch.keys.size.should == 1
     branch.keys.first.should == 189
@@ -44,7 +44,7 @@ describe Nimbus::Tree do
     branch[189][1].should be_kind_of Hash
     branch[189][2].should be_kind_of Hash
   end
-  
+
   it "keeps track of all SNPs used for the tree" do
     @config.load_training_data
     snps = (131..190).to_a
@@ -56,43 +56,43 @@ describe Nimbus::Tree do
       snps.include?(snp).should be_true
     }
   end
-  
+
   it "labels node when building a node and there is not a suitable split" do
     @config.load_training_data
     @tree.stub!(:snps_random_sample).and_return([33])
-    
+
     @tree.individuals = @config.training_set.individuals
     @tree.id_to_fenotype = @config.training_set.ids_fenotypes
     @tree.used_snps = []
     @tree.predictions = {}
-    
+
     branch = @tree.build_node @config.training_set.all_ids, Nimbus::LossFunctions.average(@config.training_set.all_ids, @config.training_set.ids_fenotypes)
     branch[33][0].should be_kind_of Numeric
     branch[33][1].should be_kind_of Numeric
     branch[33][2].should be_kind_of Numeric
   end
-  
+
   it "labels node when building a node with less individuals than the minimum node size" do
     @config.load_training_data
-    
+
     @tree.individuals = @config.training_set.individuals
     @tree.id_to_fenotype = @config.training_set.ids_fenotypes
     @tree.used_snps = []
     @tree.predictions = {}
-    
+
     label = @tree.build_node [1, 10, 33], Nimbus::LossFunctions.average(@config.training_set.all_ids, @config.training_set.ids_fenotypes)
     label.should be_kind_of Numeric
-    
+
     label = @tree.build_node [2, 10], Nimbus::LossFunctions.average(@config.training_set.all_ids, @config.training_set.ids_fenotypes)
     label.should be_kind_of Numeric
-    
+
     label = @tree.build_node [1, 10, 33], Nimbus::LossFunctions.average(@config.training_set.all_ids, @config.training_set.ids_fenotypes)
     label.should be_kind_of Numeric
-    
+
     label = @tree.build_node [108, 22, 10, 33], Nimbus::LossFunctions.average(@config.training_set.all_ids, @config.training_set.ids_fenotypes)
     label.should be_kind_of Numeric
   end
-  
+
   it 'computes generalization error for the tree' do
     @config.load_training_data
     @tree.seed(@config.training_set.individuals, @config.training_set.all_ids, @config.training_set.ids_fenotypes)
@@ -102,7 +102,7 @@ describe Nimbus::Tree do
     @tree.generalization_error.should > 0.0
     @tree.generalization_error.should < 100.0
   end
-  
+
   it 'estimates importance for all SNPs' do
     @config.load_training_data
     @tree.seed(@config.training_set.individuals, @config.training_set.all_ids, @config.training_set.ids_fenotypes)
@@ -112,13 +112,13 @@ describe Nimbus::Tree do
     @tree.importances.keys.should_not be_empty
     (@tree.importances.keys - (1..200).to_a).should be_empty
   end
-  
+
   it 'get prediction for an individual pushing it down a tree structure' do
     tree_structure = YAML.load(File.open fixture_file('regression_random_forest.yml')).first
     individual_data = [0]*200
     prediction = Nimbus::Tree.traverse tree_structure, individual_data
     prediction.should == 0.25043
-    
+
     individual_data[189-1] = 1
     individual_data[4-1] = 1
     individual_data[62-1] = 2
@@ -126,5 +126,5 @@ describe Nimbus::Tree do
     prediction = Nimbus::Tree.traverse tree_structure, individual_data
     prediction.should == -0.9854
   end
-  
+
 end

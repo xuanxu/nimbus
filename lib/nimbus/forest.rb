@@ -1,13 +1,13 @@
 module Nimbus
 
   #####################################################################
-  # Forest represents the Random forest being generated 
+  # Forest represents the Random forest being generated
   # (or used to test samples) by the application object.
   #
   class Forest
     attr_accessor :size, :trees, :bag, :predictions, :tree_errors, :snp_importances
     attr_accessor :options
-    
+
     # Initialize Forest object with options included in the Nimbus::Configuration object received.
     def initialize(config)
       @trees = []
@@ -20,7 +20,7 @@ module Nimbus
       @tree_snp_importances = []
       raise Nimbus::ForestError, "Forest size parameter (#{@size}) is invalid. You need at least one tree." if @size < 1
     end
-    
+
     # Creates a random forest based on the TrainingSet included in the configuration, creating N random trees (size N defined in the configuration).
     #
     # This is the method called when the application's configuration flags training on.
@@ -48,7 +48,7 @@ module Nimbus
       average_snp_importances
       average_predictions
     end
-    
+
     # Traverse a testing set through every tree of the forest and get averaged predictions for every individual in the sample.
     #
     # This is the method called when the application's configuration flags testing on.
@@ -63,26 +63,26 @@ module Nimbus
         @predictions[individual.id] = (individual_prediction / prediction_count).round(5)
       }
     end
-    
+
     # The array containing every tree in the forest, to YAML format.
     def to_yaml
       @trees.to_yaml
     end
-    
+
     private
-    
+
     def individuals_random_sample
       individuals_sample = bag.inject([]){|items, i| items << bag.sample }.sort
     end
-    
+
     def oob(in_bag=[])
       bag - in_bag.uniq
     end
-    
+
     def bag
       @bag ||= @options.training_set.all_ids
     end
-    
+
     def acumulate_predictions(preds)
       preds.each_pair.each{|id, value|
         if @predictions[id].nil?
@@ -94,13 +94,13 @@ module Nimbus
         end
       }
     end
-    
+
     def average_predictions
       @predictions.each_pair{|id, value|
         @predictions[id] = (@predictions[id] / @times_predicted[id]).round(5)
       }
     end
-    
+
     def average_snp_importances
       1.upto(@options.tree_SNP_total_count) {|snp|
         @snp_importances[snp] = 0.0
@@ -110,7 +110,7 @@ module Nimbus
         @snp_importances[snp] = @snp_importances[snp] / @size
       }
     end
-    
+
   end
-  
+
 end

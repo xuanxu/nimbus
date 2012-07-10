@@ -1,12 +1,12 @@
 module Nimbus
   #####################################################################
-  # Nimbus configuration object. 
-  # 
+  # Nimbus configuration object.
+  #
   # This class reads every user file.
-  # Once the user's config.yml file is loaded, a set of default and 
+  # Once the user's config.yml file is loaded, a set of default and
   # custom options is created and stored.
-  # 
-  # Nimbus::Configuration also reads the testing files and the data 
+  #
+  # Nimbus::Configuration also reads the testing files and the data
   # to create the training set to be passed to the Nimbus::Forest random
   # forest generator and the Nimbus::Tree classes in it.
   #
@@ -32,65 +32,65 @@ module Nimbus
       :output_snp_importances_file,
       :silent
     )
-    
+
     DEFAULTS = {
       :forest_size          => 500,
       :tree_SNP_sample_size => 60,
       :tree_SNP_total_count => 200,
       :tree_node_min_size   => 5,
-      
+
       :loss_function_discrete   => 'majority_class',
       :loss_function_continuous => 'mean',
-      
+
       :training_file => 'training.data',
       :testing_file  => 'testing.data',
       :forest_file   => 'forest.yml',
       :config_file   => 'config.yml',
-      
+
       :output_forest_file   => 'random_forest.yml',
       :output_training_file => 'training_file_predictions.txt',
       :output_testing_file  => 'testing_file_predictions.txt',
       :output_tree_errors_file => 'generalization_errors.txt',
       :output_snp_importances_file => 'snp_importances.txt',
-      
+
       :silent => false
     }
-    
+
     # Initialize a Nimbus::Configuration object.
     #
     # Set all options to their default values.
     def initialize
       @do_training = false
       @do_testing  = false
-      
+
       @forest_size              = DEFAULTS[:forest_size]
       @tree_SNP_sample_size     = DEFAULTS[:tree_SNP_sample_size]
       @tree_SNP_total_count     = DEFAULTS[:tree_SNP_total_count]
       @tree_node_min_size       = DEFAULTS[:tree_node_min_size]
       @loss_function_discrete   = DEFAULTS[:loss_function_discrete]
       @loss_function_continuous = DEFAULTS[:loss_function_continuous]
-      
+
       @output_forest_file   = File.expand_path(DEFAULTS[:output_forest_file], Dir.pwd)
       @output_training_file = File.expand_path(DEFAULTS[:output_training_file], Dir.pwd)
       @output_testing_file  = File.expand_path(DEFAULTS[:output_testing_file], Dir.pwd)
       @output_tree_errors_file  = File.expand_path(DEFAULTS[:output_tree_errors_file], Dir.pwd)
       @output_snp_importances_file = File.expand_path(DEFAULTS[:output_snp_importances_file], Dir.pwd)
-      
+
       @silent = ENV['nimbus_test'] == 'running_nimbus_tests' ? true : DEFAULTS[:silent]
     end
-    
+
     # Accessor method for the tree-related subset of options.
     def tree
-      { 
+      {
         :snp_sample_size => @tree_SNP_sample_size,
         :snp_total_count => @tree_SNP_total_count,
         :tree_node_min_size => @tree_node_min_size
       }
     end
-    
+
     # This is the first method to be called on Configuration when a config.yml file
     # exists with user input options for the forest.
-    # 
+    #
     # * The method will read the config file and change the default value of the selected options.
     # * Then based on the options and the existence of training, testing and forest files, it will mark:
     #   - if training is needed,
@@ -110,7 +110,7 @@ module Nimbus
           raise Nimbus::WrongFormatFileError, "It was not posible to parse the config file (#{config_file}): \r\n#{e.message} "
         end
       end
-      
+
       if user_config_params['input']
         @training_file = File.expand_path(user_config_params['input']['training'], dirname) if user_config_params['input']['training']
         @testing_file  = File.expand_path(user_config_params['input']['testing' ], dirname) if user_config_params['input']['testing']
@@ -120,14 +120,14 @@ module Nimbus
         @testing_file  = File.expand_path(DEFAULTS[:testing_file ], Dir.pwd) if File.exists? File.expand_path(DEFAULTS[:testing_file ], Dir.pwd)
         @forest_file   = File.expand_path(DEFAULTS[:forest_file  ], Dir.pwd) if File.exists? File.expand_path(DEFAULTS[:forest_file  ], Dir.pwd)
       end
-      
+
       @do_training = true if @training_file
       @do_testing  = true if @testing_file
-      
+
       if @do_testing && !@do_training && !@forest_file
         raise Nimbus::InputFileError, "There is not random forest data (training file not defined, and forest file not found)."
       end
-      
+
       if user_config_params['forest']
         @forest_size          = user_config_params['forest']['forest_size'].to_i if user_config_params['forest']['forest_size']
         @tree_SNP_total_count = user_config_params['forest']['SNP_total_count'].to_i if user_config_params['forest']['SNP_total_count']
@@ -138,7 +138,7 @@ module Nimbus
       check_configuration
       log_configuration
     end
-    
+
     # The method reads the training file, and if the data is valid, creates a Nimbus::TrainingSet
     # containing every individual to be used as training sample for a random forest.
     def load_training_data
@@ -155,7 +155,7 @@ module Nimbus
         end
       }
     end
-    
+
     # Reads the testing file, and if the data is valid, yields one Nimbus::Individual at a time.
     def read_testing_data
       File.open(@testing_file) {|file|
@@ -169,7 +169,7 @@ module Nimbus
         end
       }
     end
-    
+
     # Creates a Nimbus::Forest object from a user defined random forest data file.
     #
     # The format of the input file should be the same as the forest output data of a Nimbus Application.
@@ -186,14 +186,14 @@ module Nimbus
       forest.trees = trees
       forest
     end
-    
+
     # Include tests to be passed by the info contained in the config file.
     #
     # If some of the configuration data provided by the user is invalid, an error is raised and execution stops.
     def check_configuration
       raise Nimbus::ConfigurationError, "The mtry sample size must be smaller than the total SNPs count." if @tree_SNP_sample_size > @tree_SNP_total_count
     end
-    
+
     # Prints the information stored in the Nimbus::Configuration object
     #
     # It could include errors on the configuration input data, training related info and/or testing related info.
@@ -209,7 +209,7 @@ module Nimbus
         Nimbus.message "*" * 50
         Nimbus.stop "Error: No input data. Nimbus finished."
       end
-      
+
       Nimbus.message "*" * 50
       Nimbus.message "* Nimbus configured with the following parameters: "
       Nimbus.message "*   Forest size: #{@forest_size} trees"
@@ -217,23 +217,23 @@ module Nimbus
       Nimbus.message "*   SNPs sample size (mtry): #{@tree_SNP_sample_size}"
       Nimbus.message "*   Minimun node size in tree: #{@tree_node_min_size}"
       Nimbus.message "*" * 50
-      
+
       if @do_training
         Nimbus.message "* Training data:"
         Nimbus.message "*   Training file: #{@training_file}"
         Nimbus.message "*" * 50
       end
-      
+
       if @do_testing
         Nimbus.message "* Data to be tested:"
         Nimbus.message "*   Testing file: #{@testing_file}"
         if @forest_file
-          Nimbus.message "* using the structure of the random forest stored in:" 
+          Nimbus.message "* using the structure of the random forest stored in:"
           Nimbus.message "*   Random forest file: #{@forest_file}"
         end
         Nimbus.message "*" * 50
       end
     end
-    
+
   end
 end
