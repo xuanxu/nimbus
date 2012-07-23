@@ -1,5 +1,4 @@
 require 'yaml'
-require 'optparse'
 require 'nimbus/exceptions'
 require 'nimbus/training_set'
 require 'nimbus/configuration'
