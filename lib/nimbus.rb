@@ -5,6 +5,7 @@ require 'nimbus/configuration'
 require 'nimbus/loss_functions'
 require 'nimbus/individual'
 require 'nimbus/tree'
+require 'nimbus/regression_tree'
 require 'nimbus/forest'
 require 'nimbus/application'
 require 'nimbus/version'
@@ -58,6 +59,8 @@ module Nimbus
 
     # Clear current console line
     def clear_line!
+      self.write "\r"
+      self.write(" " * 50)
       self.write "\r"
     end
 

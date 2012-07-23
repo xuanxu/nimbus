@@ -35,10 +35,10 @@ module Nimbus
     # Every tree of the forest is created with a different random sample of the individuals in the training set.
     def grow
       @size.times do |i|
-        Nimbus.write("Creating trees: #{i+1}/#{@size} ")
+        Nimbus.write("\rCreating trees: #{i+1}/#{@size} ")
         tree_individuals_bag = individuals_random_sample
         tree_out_of_bag = oob tree_individuals_bag
-        tree = Tree.new @options.tree
+        tree = RegressionTree.new @options.tree
         @trees << tree.seed(@options.training_set.individuals, tree_individuals_bag, @options.training_set.ids_fenotypes)
         @tree_errors << tree.generalization_error_from_oob(tree_out_of_bag)
         @tree_snp_importances << tree.estimate_importances(tree_out_of_bag)
