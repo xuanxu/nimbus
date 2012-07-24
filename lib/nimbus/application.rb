@@ -59,9 +59,6 @@ module Nimbus
         yield
       rescue SystemExit => ex
         raise
-      rescue OptionParser::InvalidOption => ex
-        display_error_message(Nimbus::InvalidOptionError ex.message)
-        Nimbus.stop
       rescue Nimbus::Error => ex
         display_error_message(ex)
         Nimbus.stop
