@@ -37,14 +37,14 @@ describe Nimbus::LossFunctions do
 
   it "method for majority class" do
     ids     = [1,2,3,4,5,7,85]
-    values  = {1 => 'B', 2 => 'C', 3 => 'A', 4 => 'A', 5 => 'C', 7 => 'B', 85 => 'C'} #3C, 2A, 1B
+    values  = {1 => 'B', 2 => 'C', 3 => 'A', 4 => 'A', 5 => 'C', 7 => 'B', 85 => 'C'} #3C, 2A, 2B
     classes = ['A', 'B', 'C']
     Nimbus::LossFunctions.majority_class(ids, values, classes).should == 'C'
   end
 
   it "majority class method selects randomly if more than one majority class" do
-    ids     = [1,2,3,4,5,7,85, 99]
-    values  = {1 => 'B', 2 => 'C', 3 => 'A', 4 => 'A', 5 => 'C', 7 => 'B', 85 => 'C', 99 => 'A'} #3C, 3A, 1B
+    ids     = [1,2,3,4,5,7,85,99]
+    values  = {1 => 'B', 2 => 'C', 3 => 'A', 4 => 'A', 5 => 'C', 7 => 'B', 85 => 'C', 99 => 'A'} #3C, 3A, 2B
     classes = ['A', 'B', 'C']
     results = []
     20.times do
@@ -52,6 +52,14 @@ describe Nimbus::LossFunctions do
     end
     results.should include('A')
     results.should include('C')
+  end
+
+  it "Gini index" do
+    ids     = [1,2,3,4,5,7]
+    values  = {1 => 'B', 2 => 'C', 3 => 'A', 4 => 'A', 5 => 'C', 7 => 'C'} #3C, 2A, 1B
+    classes = ['A', 'B', 'C']
+    # Gini = 1 - ( (3/6)^2 + (2/6)^2 + (1/6)^2 ) = 0.61111
+    Nimbus::LossFunctions.gini_index(ids, values, classes).should == 0.61111
   end
 
 end

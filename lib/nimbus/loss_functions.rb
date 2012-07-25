@@ -38,6 +38,17 @@ module Nimbus
 
       # CLASSSIFICATION
 
+      # Gini index of a list of classified individuals.
+      #
+      # If a dataset T contains examples from n classes, then:
+      # gini(T) = 1 - Sum (Pj)^2
+      # where Pj is the relative frequency of class j in T
+      def gini_index(ids, value_table, classes)
+        total_size = ids.size.to_f
+        gini = 1 - class_sizes(ids, value_table, classes).inject(0.0){|sum, size| sum + (size/total_size)**2}
+        gini.round(5)
+      end
+
       # Majority class of a list of classified individuals.
       # If more than one class has the same number of individuals, 
       # one of the majority classes is selected randomly.
