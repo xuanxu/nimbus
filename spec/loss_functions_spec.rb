@@ -35,4 +35,23 @@ describe Nimbus::LossFunctions do
     Nimbus::LossFunctions.squared_difference(22, 10).should == 144.0
   end
 
+  it "method for majority class" do
+    ids     = [1,2,3,4,5,7,85]
+    values  = {1 => 'B', 2 => 'C', 3 => 'A', 4 => 'A', 5 => 'C', 7 => 'B', 85 => 'C'} #3C, 2A, 1B
+    classes = ['A', 'B', 'C']
+    Nimbus::LossFunctions.majority_class(ids, values, classes).should == 'C'
+  end
+
+  it "majority class method selects randomly if more than one majority class" do
+    ids     = [1,2,3,4,5,7,85, 99]
+    values  = {1 => 'B', 2 => 'C', 3 => 'A', 4 => 'A', 5 => 'C', 7 => 'B', 85 => 'C', 99 => 'A'} #3C, 3A, 1B
+    classes = ['A', 'B', 'C']
+    results = []
+    20.times do
+      results << Nimbus::LossFunctions.majority_class(ids, values, classes)
+    end
+    results.should include('A')
+    results.should include('C')
+  end
+
 end

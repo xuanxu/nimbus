@@ -11,6 +11,7 @@ module Nimbus
   module LossFunctions
 
     class << self
+      # REGRESSION
 
       # Simple average: sum(n) / n
       def average(ids, value_table)
@@ -35,6 +36,23 @@ module Nimbus
         0.0 + (x-y)**2
       end
 
+      # CLASSSIFICATION
+
+      # Majority class of a list of classified individuals.
+      # If more than one class has the same number of individuals, 
+      # one of the majority classes is selected randomly.
+      def majority_class(ids, value_table, classes)
+        sizes = class_sizes(ids, value_table, classes)
+        majority_classes = Hash[classes.zip sizes].keep_if{|k,v| v == sizes.max}.keys.sample
+      end
+
+      def group_by_class(ids, value_table, classes)
+        ids.group_by{|i| value_table[i] if classes.include? value_table[i]}
+      end
+
+      def class_sizes(ids, value_table, classes)
+        classes.map{|c| ids.count{|i| value_table[i] == c}}
+      end
     end
 
   end
