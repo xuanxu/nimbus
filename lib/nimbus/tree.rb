@@ -73,7 +73,7 @@ module Nimbus
     end
 
     def label_node(value, ids)
-      label = value.round(5)
+      label = value.is_a?(String) ? value : value.round(5)
       ids.uniq.each{|i| @predictions[i] = label}
       label
     end
