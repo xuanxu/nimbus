@@ -54,6 +54,12 @@ describe Nimbus::LossFunctions do
     results.should include('C')
   end
 
+  it "method for majority class in list" do
+    list    = %w(A A A B B B C A B C A B A)
+    classes = ['A', 'B', 'C']
+    Nimbus::LossFunctions.majority_class_in_list(list, classes).should == 'A'
+  end
+
   it "Gini index" do
     ids     = [1,2,3,4,5,7]
     values  = {1 => 'B', 2 => 'C', 3 => 'A', 4 => 'A', 5 => 'C', 7 => 'C'} #3C, 2A, 1B

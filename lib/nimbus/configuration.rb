@@ -15,6 +15,7 @@ module Nimbus
       :training_file,
       :testing_file,
       :forest_file,
+      :classes,
       :config_file,
       :forest_size,
       :tree_SNP_sample_size,
@@ -40,7 +41,7 @@ module Nimbus
       :tree_node_min_size   => 5,
 
       :loss_function_discrete   => 'majority_class',
-      :loss_function_continuous => 'mean',
+      :loss_function_continuous => 'average',
 
       :training_file => 'training.data',
       :testing_file  => 'testing.data',
@@ -84,7 +85,8 @@ module Nimbus
       {
         :snp_sample_size => @tree_SNP_sample_size,
         :snp_total_count => @tree_SNP_total_count,
-        :tree_node_min_size => @tree_node_min_size
+        :tree_node_min_size => @tree_node_min_size,
+        :classes => @classes
       }
     end
 
@@ -115,6 +117,7 @@ module Nimbus
         @training_file = File.expand_path(user_config_params['input']['training'], dirname) if user_config_params['input']['training']
         @testing_file  = File.expand_path(user_config_params['input']['testing' ], dirname) if user_config_params['input']['testing']
         @forest_file   = File.expand_path(user_config_params['input']['forest'  ], dirname) if user_config_params['input']['forest']
+        @classes       = user_config_params['input']['classes'] if user_config_params['input']['classes']
       else
         @training_file = File.expand_path(DEFAULTS[:training_file], Dir.pwd) if File.exists? File.expand_path(DEFAULTS[:training_file], Dir.pwd)
         @testing_file  = File.expand_path(DEFAULTS[:testing_file ], Dir.pwd) if File.exists? File.expand_path(DEFAULTS[:testing_file ], Dir.pwd)
@@ -123,6 +126,7 @@ module Nimbus
 
       @do_training = true if @training_file
       @do_testing  = true if @testing_file
+      @classes = @classes.map{|c| c.to_s.strip} if @classes
 
       if @do_testing && !@do_training && !@forest_file
         raise Nimbus::InputFileError, "There is not random forest data (training file not defined, and forest file not found)."
@@ -150,8 +154,11 @@ module Nimbus
           raise Nimbus::InputFileError, "Individual ##{data_id} from training set has no value for all #{@tree_SNP_total_count} SNPs" unless snp_list.size == @tree_SNP_total_count
           raise Nimbus::InputFileError, "There are individuals with no ID, please check data in training file." unless (!data_id.nil? && data_id.strip != '')
           raise Nimbus::InputFileError, "Individual ##{data_id} has no fenotype value, please check data in training file." unless (!data_feno.nil? && data_feno.strip != '')
-          @training_set.individuals[data_id.to_i] = Nimbus::Individual.new(data_id.to_i, data_feno.to_f, snp_list.map{|snp| snp.to_i})
-          @training_set.ids_fenotypes[data_id.to_i] = data_feno.to_f
+          raise Nimbus::InputFileError, "Individual ##{data_id} has invalid class (not in [#{classes*', '}]), please check data in training file." unless (@classes.nil? || @classes.include?(data_feno))
+
+          data_feno = (@classes ? data_feno.to_s : data_feno.to_f)
+          @training_set.individuals[data_id.to_i] = Nimbus::Individual.new(data_id.to_i, data_feno, snp_list.map{|snp| snp.to_i})
+          @training_set.ids_fenotypes[data_id.to_i] = data_feno
         end
       }
     end
@@ -217,6 +224,13 @@ module Nimbus
       Nimbus.message "*   Total SNP count: #{@tree_SNP_total_count}"
       Nimbus.message "*   SNPs sample size (mtry): #{@tree_SNP_sample_size}"
       Nimbus.message "*   Minimun node size in tree: #{@tree_node_min_size}"
+
+      if @classes
+        Nimbus.message "*   Mode: CLASSIFICATION"
+        Nimbus.message "*     Classes: [#{@classes*', '}]"
+      else
+        Nimbus.message "*   Mode: REGRESSION"
+      end
       Nimbus.message "*" * 50
 
       if @do_training

@@ -38,7 +38,8 @@ module Nimbus
         Nimbus.write("\rCreating trees: #{i+1}/#{@size} ")
         tree_individuals_bag = individuals_random_sample
         tree_out_of_bag = oob tree_individuals_bag
-        tree = RegressionTree.new @options.tree
+        tree_class = (classification? ? ClassificationTree : RegressionTree)
+        tree = tree_class.new @options.tree
         @trees << tree.seed(@options.training_set.individuals, tree_individuals_bag, @options.training_set.ids_fenotypes)
         @tree_errors << tree.generalization_error_from_oob(tree_out_of_bag)
         @tree_snp_importances << tree.estimate_importances(tree_out_of_bag)
@@ -46,13 +47,18 @@ module Nimbus
         Nimbus.clear_line!
       end
       average_snp_importances
-      average_predictions
+      totalize_predictions
     end
 
-    # Traverse a testing set through every tree of the forest and get averaged predictions for every individual in the sample.
+    # Traverse a testing set through every tree of the forest.
     #
     # This is the method called when the application's configuration flags testing on.
     def traverse
+      classification? ? traverse_classification_forest : traverse_regression_forest
+    end
+
+    # Traverse a testing set through every regression tree of the forest and get averaged predictions for every individual in the sample.
+    def traverse_regression_forest
       @predictions = {}
       prediction_count = trees.size
       @options.read_testing_data{|individual|
@@ -61,6 +67,18 @@ module Nimbus
           individual_prediction = (individual_prediction + Nimbus::Tree.traverse(t, individual.snp_list)).round(5)
         end
         @predictions[individual.id] = (individual_prediction / prediction_count).round(5)
+      }
+    end
+
+    # Traverse a testing set through every classification tree of the forest and get majority class predictions for every individual in the sample.
+    def traverse_classification_forest
+      @predictions = {}
+      @options.read_testing_data{|individual|
+        individual_prediction = []
+        trees.each do |t|
+          individual_prediction << Nimbus::Tree.traverse(t, individual.snp_list)
+        end
+        @predictions[individual.id] = Nimbus::LossFunctions.majority_class_in_list(individual_prediction, @options.tree[:classes])
       }
     end
 
@@ -86,18 +104,28 @@ module Nimbus
     def acumulate_predictions(preds)
       preds.each_pair.each{|id, value|
         if @predictions[id].nil?
-          @predictions[id] = value
+          @predictions[id] = (classification? ? [value] : value)
           @times_predicted[id] = 1.0
         else
-          @predictions[id] += value
+          classification? ? (@predictions[id] << value) : (@predictions[id] += value)
           @times_predicted[id] += 1
         end
       }
     end
 
+    def totalize_predictions
+      classification? ? majority_class_predicted : average_predictions
+    end
+
     def average_predictions
       @predictions.each_pair{|id, value|
         @predictions[id] = (@predictions[id] / @times_predicted[id]).round(5)
+      }
+    end
+
+    def majority_class_predicted
+      @predictions.each_pair{|id, values|
+        @predictions[id] = Nimbus::LossFunctions.majority_class_in_list(values, @options.tree[:classes])
       }
     end
 
@@ -109,6 +137,14 @@ module Nimbus
         }
         @snp_importances[snp] = @snp_importances[snp] / @size
       }
+    end
+
+    def classification?
+      @options.tree[:classes]
+    end
+
+    def regression?
+      @options.tree[:classes].nil?
     end
 
   end

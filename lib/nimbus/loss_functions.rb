@@ -11,7 +11,7 @@ module Nimbus
   module LossFunctions
 
     class << self
-      # REGRESSION
+      ## REGRESSION
 
       # Simple average: sum(n) / n
       def average(ids, value_table)
@@ -36,7 +36,7 @@ module Nimbus
         0.0 + (x-y)**2
       end
 
-      # CLASSSIFICATION
+      ## CLASSSIFICATION
 
       # Gini index of a list of classified individuals.
       #
@@ -45,22 +45,28 @@ module Nimbus
       # where Pj is the relative frequency of class j in T
       def gini_index(ids, value_table, classes)
         total_size = ids.size.to_f
-        gini = 1 - class_sizes(ids, value_table, classes).inject(0.0){|sum, size| sum + (size/total_size)**2}
+        gini = 1 - class_sizes(ids, value_table, classes).inject(0.0){|sum, size| 
+          sum + (size/total_size)**2}
         gini.round(5)
       end
 
       # Majority class of a list of classified individuals.
-      # If more than one class has the same number of individuals, 
+      # If more than one class has the same number of individuals,
       # one of the majority classes is selected randomly.
       def majority_class(ids, value_table, classes)
         sizes = class_sizes(ids, value_table, classes)
-        majority_classes = Hash[classes.zip sizes].keep_if{|k,v| v == sizes.max}.keys.sample
+        Hash[classes.zip sizes].keep_if{|k,v| v == sizes.max}.keys.sample
       end
 
-      def group_by_class(ids, value_table, classes)
-        ids.group_by{|i| value_table[i] if classes.include? value_table[i]}
+      # Majority class of a list of classes.
+      # If more than one class has the same number of individuals,
+      # one of the majority classes is selected randomly.
+      def majority_class_in_list(list, classes)
+        sizes = classes.map{|c| list.count{|i| i == c}}
+        Hash[classes.zip sizes].keep_if{|k,v| v == sizes.max}.keys.sample
       end
 
+      # Array with the list of sizes of each class in the given list of individuals.
       def class_sizes(ids, value_table, classes)
         classes.map{|c| ids.count{|i| value_table[i] == c}}
       end

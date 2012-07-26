@@ -10,20 +10,47 @@ describe Nimbus::Configuration do
     config.training_file.should == fixture_file('regression_training.data')
     config.testing_file.should == fixture_file('regression_testing.data')
     config.forest_file.should == fixture_file('regression_random_forest.yml')
+    config.classes.should be_nil
 
     config.forest_size.should == 3
     config.tree_SNP_sample_size.should == 60
     config.tree_SNP_total_count.should == 200
     config.tree_node_min_size.should == 5
+
+    config = Nimbus::Configuration.new
+    config.load fixture_file('classification_config.yml')
+
+    config.training_file.should == fixture_file('classification_training.data')
+    config.testing_file.should == fixture_file('classification_testing.data')
+    config.forest_file.should == fixture_file('classification_random_forest.yml')
+    config.classes.should == ['0','1']
+
+    config.forest_size.should == 3
+    config.tree_SNP_sample_size.should == 33
+    config.tree_SNP_total_count.should == 100
+    config.tree_node_min_size.should == 5
   end
 
-  it 'tree method return tree-related subset of options' do
+  it 'tree method return tree-related subset of options for regression trees' do
     config = Nimbus::Configuration.new
+    config.load fixture_file('regression_config.yml')
     tree_options = config.tree
 
     tree_options[:snp_sample_size].should_not be_nil
     tree_options[:snp_total_count].should_not be_nil
     tree_options[:tree_node_min_size].should_not be_nil
+    tree_options[:classes].should be_nil
+  end
+
+  it 'tree method return tree-related subset of options for classification trees' do
+    config = Nimbus::Configuration.new
+    config.load fixture_file('classification_config.yml')
+    tree_options = config.tree
+
+    tree_options[:snp_sample_size].should_not be_nil
+    tree_options[:snp_total_count].should_not be_nil
+    tree_options[:tree_node_min_size].should_not be_nil
+    tree_options[:classes].should_not be_nil
   end
 
   it "creates a training set object from training data file" do
