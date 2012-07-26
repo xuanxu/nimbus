@@ -31,6 +31,20 @@ Nimbus can be used to:
 
 **Testing**: For prediction a sample is pushed down the tree. It is assigned the label of the training sample in the terminal node it ends up in. This procedure is iterated over all trees in the ensemble, and the average vote of all trees is reported as random forest prediction.
 
+## Regression and Classification
+
+Nimbus can be used both with regression and classification problems.
+
+**Regression**: is the default mode. 
+
+* The split of nodes uses quadratic loss as loss function. 
+* Labeling of nodes is made averaging the fenotype values of the individuals in the node.
+
+**Classification**: user-activated declaring `classes` in the configuration file. 
+
+* The split of nodes uses the Gini index as loss function. 
+* Labeling of nodes is made finding the majority fenotype class of the individuals in the node.
+
 ## Install
 
 You need to have Ruby (1.9.2 or higher) and Rubygems installed in your computer. Then install nimbus with:
@@ -62,6 +76,7 @@ The `config.yml` has the following structure and parameters:
       training: training_regression.data
       testing: testing_regression.data
       forest: my_forest.yml
+      classes: [0,1]
 
     #Forest parameters
     forest:
@@ -75,6 +90,7 @@ Under the input chapter:
  * `training`: specify the path to the training data file (optional, if specified `nimbus` will create a random forest).
  * `testing`: specify the path to the testing data file (optional, if specified `nimbus` will traverse this dat through a random forest).
  * `forest`: specify the path to a file containing a random forest structure (optional, if there is also testing file, this will be the forest used for the testing).
+ * `classes`: **optional (needed only for classification problems)**. Specify the list of classes in the input files as a comma separated list between squared brackets, e.g.:`[A,B]`.
 
 Under the forest chapter:
 
