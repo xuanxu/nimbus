@@ -38,7 +38,7 @@ describe Nimbus::Forest do
       @forest = @config.load_forest
       @forest.predictions.should == {}
 
-      tree_structure = YAML.load(File.open fixture_file('regression_random_forest.yml'))
+      tree_structure = Psych.load(File.open fixture_file('regression_random_forest.yml'))
       expected_predictions = {}
       @config.read_testing_data{|individual|
         individual_prediction = 0.0
@@ -54,7 +54,7 @@ describe Nimbus::Forest do
 
     it 'can output forest structure in YAML format' do
       @forest = @config.load_forest
-      YAML.load(File.open fixture_file('regression_random_forest.yml')) == YAML.load(@forest.to_yaml)
+      Psych.load(File.open fixture_file('regression_random_forest.yml')) == Psych.load(@forest.to_yaml)
     end
   end
 
@@ -94,7 +94,7 @@ describe Nimbus::Forest do
       @forest = @config.load_forest
       @forest.predictions.should == {}
 
-      tree_structure = YAML.load(File.open fixture_file('classification_random_forest.yml'))
+      tree_structure = Psych.load(File.open fixture_file('classification_random_forest.yml'))
       expected_predictions = {}
       @config.read_testing_data{|individual|
         individual_prediction = []
@@ -110,7 +110,7 @@ describe Nimbus::Forest do
 
     it 'can output forest structure in YAML format' do
       @forest = @config.load_forest
-      YAML.load(File.open fixture_file('classification_random_forest.yml')) == YAML.load(@forest.to_yaml)
+      Psych.load(File.open fixture_file('classification_random_forest.yml')) == Psych.load(@forest.to_yaml)
     end
   end
 end

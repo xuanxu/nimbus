@@ -105,7 +105,7 @@ describe Nimbus::Configuration do
     config = Nimbus::Configuration.new
     config.load fixture_file('regression_config.yml')
 
-    trees = YAML.load(File.open fixture_file('regression_random_forest.yml'))
+    trees = Psych.load(File.open fixture_file('regression_random_forest.yml'))
     trees.first.keys.first.should == 189
     trees.size.should == 3
 

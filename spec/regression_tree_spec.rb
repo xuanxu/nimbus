@@ -113,7 +113,7 @@ describe Nimbus::RegressionTree do
   end
 
   it 'get prediction for an individual pushing it down a tree structure' do
-    tree_structure = YAML.load(File.open fixture_file('regression_random_forest.yml')).first
+    tree_structure = Psych.load(File.open fixture_file('regression_random_forest.yml')).first
     individual_data = [0]*200
     prediction = Nimbus::Tree.traverse tree_structure, individual_data
     prediction.should == 0.25043

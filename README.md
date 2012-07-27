@@ -76,7 +76,7 @@ The `config.yml` has the following structure and parameters:
       training: training_regression.data
       testing: testing_regression.data
       forest: my_forest.yml
-      classes: [0,1]
+      classes: [0, 1]
 
     #Forest parameters
     forest:
@@ -90,7 +90,7 @@ Under the input chapter:
  * `training`: specify the path to the training data file (optional, if specified `nimbus` will create a random forest).
  * `testing`: specify the path to the testing data file (optional, if specified `nimbus` will traverse this dat through a random forest).
  * `forest`: specify the path to a file containing a random forest structure (optional, if there is also testing file, this will be the forest used for the testing).
- * `classes`: **optional (needed only for classification problems)**. Specify the list of classes in the input files as a comma separated list between squared brackets, e.g.:`[A,B]`.
+ * `classes`: **optional (needed only for classification problems)**. Specify the list of classes in the input files as a comma separated list between squared brackets, e.g.:`[A, B]`.
 
 Under the forest chapter:
 
@@ -110,7 +110,7 @@ The three input files you can use with Nimbus should have proper format:
 1. A column with the ID of the individual
 1. M columns (where M = SNP_total_count in `config.yml`) with values 0, 1 or 2, representing the genotype of the individual.
 
-**The training file** has any number of rows, each representing data for an individual, similar to the training file but without the fenotype column:
+**The testing file** has any number of rows, each representing data for an individual, similar to the training file but without the fenotype column:
 
 1. A column with the ID of the individual
 1. M columns (where M = SNP_total_count in `config.yml`) with values 0, 1 or 2, representing the genotype of the individual.

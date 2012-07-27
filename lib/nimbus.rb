@@ -1,4 +1,4 @@
-require 'yaml'
+require 'psych'
 require 'nimbus/exceptions'
 require 'nimbus/training_set'
 require 'nimbus/configuration'

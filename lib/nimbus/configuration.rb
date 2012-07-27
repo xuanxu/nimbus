@@ -106,7 +106,7 @@ module Nimbus
       if File.exists?(File.expand_path(config_file, Dir.pwd))
         begin
           config_file_path = File.expand_path config_file, Dir.pwd
-          user_config_params = YAML.load(File.open(config_file_path))
+          user_config_params = Psych.load(File.open(config_file_path))
           dirname = File.dirname config_file_path
         rescue ArgumentError => e
           raise Nimbus::WrongFormatFileError, "It was not posible to parse the config file (#{config_file}): \r\n#{e.message} "
@@ -184,7 +184,7 @@ module Nimbus
       trees = []
       if File.exists?(@forest_file)
         begin
-          trees = YAML.load(File.open @forest_file)
+          trees = Psych.load(File.open @forest_file)
         rescue ArgumentError => e
           raise Nimbus::WrongFormatFileError, "It was not posible to parse the random forest file (#{@forest_file}): \r\n#{e.message} "
         end
