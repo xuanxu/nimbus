@@ -188,6 +188,8 @@ module Nimbus
         rescue ArgumentError => e
           raise Nimbus::WrongFormatFileError, "It was not posible to parse the random forest file (#{@forest_file}): \r\n#{e.message} "
         end
+      else
+        raise Nimbus::InputFileError, "Forest file not found (#{@forest_file})"
       end
       forest = Nimbus::Forest.new self
       forest.trees = trees
