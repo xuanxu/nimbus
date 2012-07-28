@@ -25,6 +25,7 @@ module Nimbus
       :loss_function_continuous,
       :do_training,
       :do_testing,
+      :do_importances,
       :training_set,
       :output_forest_file,
       :output_training_file,
@@ -63,6 +64,7 @@ module Nimbus
     def initialize
       @do_training = false
       @do_testing  = false
+      @do_importances = true
 
       @forest_size              = DEFAULTS[:forest_size]
       @tree_SNP_sample_size     = DEFAULTS[:tree_SNP_sample_size]
@@ -137,6 +139,8 @@ module Nimbus
         @tree_SNP_total_count = user_config_params['forest']['SNP_total_count'].to_i if user_config_params['forest']['SNP_total_count']
         @tree_SNP_sample_size = user_config_params['forest']['SNP_sample_size_mtry'].to_i  if user_config_params['forest']['SNP_sample_size_mtry']
         @tree_node_min_size   = user_config_params['forest']['node_min_size'].to_i if user_config_params['forest']['node_min_size']
+        @do_importances       = user_config_params['forest']['var_importances'].to_s.strip.downcase
+        @do_importances       = (@do_importances != 'no' && @do_importances != 'false')
       end
 
       check_configuration
@@ -170,7 +174,7 @@ module Nimbus
           next if line.strip == ''
           data_id, *snp_list = line.strip.split
           raise Nimbus::InputFileError, "There are individuals with no ID, please check data in Testing file." unless (!data_id.nil? && data_id.strip != '')
-          raise Nimbus::InputFileError, "Individual ##{data_id} from testing set has no value for all #{@tree_SNP_total_count} SNPs, please check structure of the testing file." unless snp_list.size == @tree_SNP_total_count
+          raise Nimbus::InputFileError, "Individual ##{data_id} from testing set has no value for all #{@tree_SNP_total_count} SNPs." unless snp_list.size == @tree_SNP_total_count
           individual_test = Nimbus::Individual.new(data_id.to_i, nil, snp_list.map{|snp| snp.to_i})
           yield individual_test
         end

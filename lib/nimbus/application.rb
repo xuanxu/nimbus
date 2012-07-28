@@ -34,7 +34,7 @@ module Nimbus
           output_random_forest_file(@forest)
           output_tree_errors_file(@forest)
           output_training_file_predictions(@forest)
-          output_snp_importances_file(@forest)
+          output_snp_importances_file(@forest) if @config.do_importances
         end
 
         if @config.do_testing

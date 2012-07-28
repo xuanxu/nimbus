@@ -34,6 +34,13 @@ describe Nimbus::Forest do
       @forest.snp_importances.values.each{|v| v.should be_kind_of Numeric}
     end
 
+    it 'does not compute SNP importances if config set to false' do
+      @forest.snp_importances.should == {}
+      @forest.options.do_importances = false
+      @forest.grow
+      @forest.snp_importances.should == {}
+    end
+
     it 'traverses a set of testing individuals through every tree in the forest and returns predictions' do
       @forest = @config.load_forest
       @forest.predictions.should == {}
@@ -85,9 +92,17 @@ describe Nimbus::Forest do
 
     it 'computes averaged SNP importances for every SNP' do
       @forest.snp_importances.should == {}
+      @forest.options.do_importances = true
       @forest.grow
       @forest.snp_importances.keys.sort.should == (1..100).to_a # 100 snps in the training file
       @forest.snp_importances.values.each{|v| v.should be_kind_of Numeric}
+    end
+
+    it 'does not compute SNP importances if config set to false' do
+      @forest.snp_importances.should == {}
+      @forest.options.do_importances = false
+      @forest.grow
+      @forest.snp_importances.should == {}
     end
 
     it 'traverses a set of testing individuals through every tree in the forest and returns predictions' do

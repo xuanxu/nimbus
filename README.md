@@ -45,6 +45,12 @@ Nimbus can be used both with regression and classification problems.
 * The split of nodes uses the Gini index as loss function. 
 * Labeling of nodes is made finding the majority fenotype class of the individuals in the node.
 
+## Variable importances
+
+By default Nimbus will estimate SNP importances everytime a training file is run to create a forest.
+
+You can disable this behaviour (and speed up the training process) by setting the parameter `var_importances: No` in the configuration file.
+
 ## Install
 
 You need to have Ruby (1.9.2 or higher) and Rubygems installed in your computer. Then install nimbus with:
@@ -98,6 +104,7 @@ Under the forest chapter:
  * `SNP_sample_size_mtry`: size of the random sample of SNPs to be used in every tree node.
  * `SNP_total_count`: total count of SNPs in the training and/or testing files
  * `node_min_size`: minimum amount of individuals in a tree node to make a split.
+ * `var_importances`: **optional**. If set to `No` Nimbus will not calculate SNP importances.
 
 
 ## Input files
@@ -126,7 +133,7 @@ After training:
  * `random_forest.yml`: A file defining the structure of the computed Random Forest. It can be used as input forest file.
  * `generalization_errors.txt`: A file with the generalization error for every tree in the forest.
  * `training_file_predictions.txt`: A file with predictions for every individual from the training file.
- * `snp_importances.txt`: A file with the computed importance for every SNP.
+ * `snp_importances.txt`: A file with the computed importance for every SNP. _(unless `var_importances` set to `No` in config file)_
 
 After testing:
 

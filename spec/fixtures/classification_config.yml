@@ -11,3 +11,4 @@ forest:
   SNP_sample_size_mtry: 33 #mtry
   SNP_total_count: 100
   node_min_size: 5
+  var_importances: NO

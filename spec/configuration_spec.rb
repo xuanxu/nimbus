@@ -11,6 +11,7 @@ describe Nimbus::Configuration do
     config.testing_file.should == fixture_file('regression_testing.data')
     config.forest_file.should == fixture_file('regression_random_forest.yml')
     config.classes.should be_nil
+    config.do_importances.should be
 
     config.forest_size.should == 3
     config.tree_SNP_sample_size.should == 60
@@ -24,6 +25,7 @@ describe Nimbus::Configuration do
     config.testing_file.should == fixture_file('classification_testing.data')
     config.forest_file.should == fixture_file('classification_random_forest.yml')
     config.classes.should == ['0','1']
+    config.do_importances.should_not be
 
     config.forest_size.should == 3
     config.tree_SNP_sample_size.should == 33
