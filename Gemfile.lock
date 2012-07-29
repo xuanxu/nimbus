@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nimbus (2.1.0)
+    nimbus (2.2.0)
 
 GEM
   remote: http://rubygems.org/
