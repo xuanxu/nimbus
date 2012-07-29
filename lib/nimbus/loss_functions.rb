@@ -45,7 +45,7 @@ module Nimbus
       # where Pj is the relative frequency of class j in T
       def gini_index(ids, value_table, classes)
         total_size = ids.size.to_f
-        gini = 1 - class_sizes(ids, value_table, classes).inject(0.0){|sum, size| 
+        gini = 1 - class_sizes(ids, value_table, classes).inject(0.0){|sum, size|
           sum + (size/total_size)**2}
         gini.round(5)
       end
@@ -69,6 +69,11 @@ module Nimbus
       # Array with the list of sizes of each class in the given list of individuals.
       def class_sizes(ids, value_table, classes)
         classes.map{|c| ids.count{|i| value_table[i] == c}}
+      end
+
+      # Array with the list of sizes of each class in the given list of classes.
+      def class_sizes_in_list(list, classes)
+        classes.map{|c| list.count{|i| i == c}}
       end
     end
 

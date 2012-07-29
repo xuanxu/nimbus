@@ -60,6 +60,19 @@ describe Nimbus::LossFunctions do
     Nimbus::LossFunctions.majority_class_in_list(list, classes).should == 'A'
   end
 
+  it "method for class sizes" do
+    ids     = [1,2,3,4,5,7,85]
+    values  = {1 => 'B', 2 => 'C', 3 => 'A', 4 => 'A', 5 => 'C', 7 => 'B', 85 => 'C'} #2A, 2B, 3C
+    classes = ['A', 'B', 'C']
+    Nimbus::LossFunctions.class_sizes(ids, values, classes).should == [2, 2, 3]
+  end
+
+  it "method for class sizes in list" do
+    list    = %w(A A A B B B C A B C A B A)  # 6A, 5B, 2C
+    classes = ['A', 'B', 'C']
+    Nimbus::LossFunctions.class_sizes_in_list(list, classes).should == [6, 5, 2]
+  end
+
   it "Gini index" do
     ids     = [1,2,3,4,5,7]
     values  = {1 => 'B', 2 => 'C', 3 => 'A', 4 => 'A', 5 => 'C', 7 => 'C'} #3C, 2A, 1B
