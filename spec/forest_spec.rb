@@ -117,7 +117,7 @@ describe Nimbus::Forest do
           individual_prediction << Nimbus::Tree.traverse(t, individual.snp_list)
         end
         class_sizes = Nimbus::LossFunctions.class_sizes_in_list(individual_prediction, @config.tree[:classes]).map{|p| (p/individual_prediction.size.to_f).round(3)}
-        expected_predictions[individual.id] = Hash[@config.tree[:classes].zip class_sizes].to_s
+        expected_predictions[individual.id] = Hash[@config.tree[:classes].zip class_sizes].map{|k,v| "'#{k}': #{v}"}.join(' , ')
       }
 
       @forest.traverse

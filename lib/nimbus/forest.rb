@@ -79,7 +79,7 @@ module Nimbus
           individual_prediction << Nimbus::Tree.traverse(t, individual.snp_list)
         end
         class_sizes = Nimbus::LossFunctions.class_sizes_in_list(individual_prediction, @options.tree[:classes]).map{|p| (p/individual_prediction.size.to_f).round(3)}
-        @predictions[individual.id] = Hash[@options.tree[:classes].zip class_sizes].to_s
+        @predictions[individual.id] = Hash[@options.tree[:classes].zip class_sizes].map{|k,v| "'#{k}': #{v}"}.join(' , ')
       }
     end
 
