@@ -88,6 +88,16 @@ module Nimbus
       raise Nimbus::TreeError, "Values for SNPs columns must be in [0, 1, 2]"
     end
 
+    def split_by_value(ids, snp, value)
+      split = [[], []]
+      ids.each do |i|
+        @individuals[i].snp_list[snp-1] > value ? (split[1] << @individuals[i].id) : (split[0] << @individuals[i].id)
+      end
+      split
+    rescue => ex
+      raise Nimbus::TreeError, "Values for SNPs columns must be numeric"
+    end
+
     def split_by_snp(x)
       @used_snps << x
     end
