@@ -35,6 +35,17 @@ module Nimbus
       def squared_difference(x,y)
         0.0 + (x-y)**2
       end
+      
+      # Simplified Huber function
+      def pseudo_huber_error(ids, value_table, mean = nil)
+        mean ||= self.average ids, value_table
+        ids.inject(0.0){|sum, i| sum + (Math.log(Math.cosh(value_table[i] - mean))) }
+      end
+
+      # Simplified Huber loss function: PHE / n
+      def pseudo_huber_loss(ids, value_table, mean = nil)
+        self.pseudo_huber_error(ids, value_table, mean) / ids.size
+      end
 
       ## CLASSSIFICATION
 

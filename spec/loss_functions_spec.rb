@@ -14,7 +14,7 @@ describe Nimbus::LossFunctions do
     ids = [3,7,85]
     values = {1 => 10, 2 => 5, 3 => 21, 4 => 8, 5 => 31, 7 => 11, 85 => 22}
 
-    Nimbus::LossFunctions.mean_squared_error(ids, values).should == 74.0 # (avg(21 + 11 + 22) = 18: sum (x-11)^2
+    Nimbus::LossFunctions.mean_squared_error(ids, values).should == 74.0 # (avg(21 + 11 + 22) = 18: sum (x-18)^2
   end
 
   it "method for quadratic_loss" do
@@ -28,6 +28,24 @@ describe Nimbus::LossFunctions do
     ids = [1,2,3,4,5,7,85]
     values = {1 => 10, 2 => 5, 3 => 21, 4 => 8, 5 => 31, 7 => 11, 85 => 22}
     Nimbus::LossFunctions.quadratic_loss(ids, values).round(5).should == (Nimbus::LossFunctions.mean_squared_error(ids, values)/7 ).round(5)
+  end
+
+  it "method for pseudo Huber error" do
+    ids = [3,7,85]
+    values = {1 => 10, 2 => 5, 3 => 21, 4 => 8, 5 => 31, 7 => 11, 85 => 22}
+    Nimbus::LossFunctions.pseudo_huber_error(ids, values).round(5).should == 11.92337 # (avg(21 + 11 + 22) = 18: log(cosh(x-18))
+  end
+
+  it "method for pseudo Huber loss function" do
+    ids = [1,4]
+    values = {1 => 10, 2 => 5, 3 => 21, 4 => 8, 5 => 31, 7 => 11, 85 => 22}
+    Nimbus::LossFunctions.pseudo_huber_loss(ids, values).round(5).should == 0.43378
+  end
+
+  it "pseudo Huber loss is pseudo Huber error averaged" do
+    ids = [1,2,3,4,5,7,85]
+    values = {1 => 10, 2 => 5, 3 => 21, 4 => 8, 5 => 31, 7 => 11, 85 => 22}
+    Nimbus::LossFunctions.pseudo_huber_loss(ids, values).round(5).should == (Nimbus::LossFunctions.pseudo_huber_error(ids, values)/7 ).round(5)
   end
 
   it "method for squared difference" do
