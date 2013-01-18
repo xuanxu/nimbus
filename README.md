@@ -1,5 +1,8 @@
-# Nimbus [![Build Status](https://secure.travis-ci.org/xuanxu/nimbus.png?branch=master)](http://travis-ci.org/xuanxu/nimbus)
+# Nimbus
 Random Forest algorithm for genomic selection.
+
+[![Build Status](https://secure.travis-ci.org/xuanxu/nimbus.png?branch=master)](http://travis-ci.org/xuanxu/nimbus)
+[![Gem Version](https://badge.fury.io/rb/nimbus.png)](http://badge.fury.io/rb/nimbus)
 
 ## Random Forest
 
@@ -35,14 +38,14 @@ Nimbus can be used to:
 
 Nimbus can be used both with regression and classification problems.
 
-**Regression**: is the default mode. 
+**Regression**: is the default mode.
 
-* The split of nodes uses quadratic loss as loss function. 
+* The split of nodes uses quadratic loss as loss function.
 * Labeling of nodes is made averaging the fenotype values of the individuals in the node.
 
-**Classification**: user-activated declaring `classes` in the configuration file. 
+**Classification**: user-activated declaring `classes` in the configuration file.
 
-* The split of nodes uses the Gini index as loss function. 
+* The split of nodes uses the Gini index as loss function.
 * Labeling of nodes is made finding the majority fenotype class of the individuals in the node.
 
 ## Variable importances
