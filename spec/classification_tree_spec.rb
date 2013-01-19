@@ -29,7 +29,7 @@ describe Nimbus::ClassificationTree do
     @tree.used_snps.should_not be_empty
   end
 
-  it "splits node in three when building a node and finds a suitable split" do
+  it "splits node when building a node and finds a suitable split" do
     @config.load_training_data
     @tree.stub!(:snps_random_sample).and_return((68..100).to_a) #97 is best split
 
@@ -43,7 +43,7 @@ describe Nimbus::ClassificationTree do
     branch.keys.first.should == 97
     branch[97].size.should == 3
     branch[97][0].should be_kind_of Hash
-    branch[97][1].should be_kind_of Hash
+    [Nimbus::Tree::NODE_SPLIT_01_2, Nimbus::Tree::NODE_SPLIT_0_12].should include(branch[97][1])
     branch[97][2].should be_kind_of Hash
   end
 
@@ -61,7 +61,7 @@ describe Nimbus::ClassificationTree do
 
   it "labels node when building a node and there is not a suitable split" do
     @config.load_training_data
-    @tree.stub!(:snps_random_sample).and_return([33])
+    @tree.stub!(:snps_random_sample).and_return([11])
 
     @tree.individuals = @config.training_set.individuals
     @tree.id_to_fenotype = @config.training_set.ids_fenotypes
@@ -69,9 +69,9 @@ describe Nimbus::ClassificationTree do
     @tree.predictions = {}
 
     branch = @tree.build_node @config.training_set.all_ids, Nimbus::LossFunctions.majority_class(@config.training_set.all_ids, @config.training_set.ids_fenotypes, @config.classes)
-    branch[33][0].should be_kind_of String
-    branch[33][1].should be_kind_of String
-    branch[33][2].should be_kind_of String
+    branch[11][0].should be_kind_of String
+    branch[11][1].should be_kind_of String
+    branch[11][2].should be_kind_of String
   end
 
   it "labels node when building a node with less individuals than the minimum node size" do
@@ -119,14 +119,14 @@ describe Nimbus::ClassificationTree do
     tree_structure = Psych.load(File.open fixture_file('classification_random_forest.yml')).first
     individual_data = [0]*100
     prediction = Nimbus::Tree.traverse tree_structure, individual_data
-    prediction.should == '1'
-
-    individual_data[26-1] = 1
-    individual_data[57-1] = 2
-    individual_data[98-1] = 2
-    individual_data[8-1]  = 1
-    prediction = Nimbus::Tree.traverse tree_structure, individual_data
     prediction.should == '0'
+
+    individual_data[8-1]  = 2
+    individual_data[29-1] = 0
+    individual_data[1-1]  = 1
+    individual_data[7-1]  = 1
+    prediction = Nimbus::Tree.traverse tree_structure, individual_data
+    prediction.should == '1'
   end
 
 end

@@ -8,7 +8,7 @@ module Nimbus
   # * 1: Calculate loss function for the individuals in the node (first node contains all the individuals).
   # * 2: Take a random sample of the SNPs (size m << total count of SNPs)
   # * 3: Compute the loss function (quadratic loss) for the split of the sample based on value of every SNP.
-  # * 4: If the SNP with minimum loss function also minimizes the general loss of the node, split the individuals sample in three nodes, based on value for that SNP [0, 1, or 2]
+  # * 4: If the SNP with minimum loss function also minimizes the general loss of the node, split the individuals sample in two nodes, based on average value for that SNP [0,1][2], or [0][1,2]
   # * 5: Repeat from 1 for every node until:
   #   - a) The individuals count in that node is < minimum size OR
   #   - b) None of the SNP splits has a loss function smaller than the node loss function
@@ -27,8 +27,8 @@ module Nimbus
 
     # Creates a node by taking a random sample of the SNPs and computing the loss function for every split by SNP of that sample.
     #
-    # * If SNP_min is the SNP with smaller loss function and it is < the loss function of the node, it splits the individuals sample in three:
-    # (those with value 0 for the SNP_min, those with value 1 for the SNP_min, and those with value 2 for the SNP_min) then it builds these 3 new nodes.
+    # * If SNP_min is the SNP with smaller loss function and it is < the loss function of the node, it splits the individuals sample in two:
+    # (the average of the 0,1,2 values for the SNP_min in the individuals is computed, and they are splitted in [<=avg], [>avg]) then it builds these 2 new nodes.
     # * Otherwise every individual in the node gets labeled with the average of the fenotype values of all of them.
     def build_node(individuals_ids, y_hat)
       # General loss function value for the node
@@ -38,22 +38,20 @@ module Nimbus
 
       # Finding the SNP that minimizes loss function
       snps = snps_random_sample
-      min_loss, min_SNP, split, means = node_loss_function, nil, nil, nil
+      min_loss, min_SNP, split, split_type, means = node_loss_function, nil, nil, nil, nil
 
       snps.each do |snp|
-        individuals_split_by_snp_value = split_by_snp_value individuals_ids, snp
+        individuals_split_by_snp_value, node_split_type = split_by_snp_avegare_value individuals_ids, snp
         mean_0 = Nimbus::LossFunctions.average individuals_split_by_snp_value[0], @id_to_fenotype
         mean_1 = Nimbus::LossFunctions.average individuals_split_by_snp_value[1], @id_to_fenotype
-        mean_2 = Nimbus::LossFunctions.average individuals_split_by_snp_value[2], @id_to_fenotype
         loss_0 = Nimbus::LossFunctions.mean_squared_error individuals_split_by_snp_value[0], @id_to_fenotype, mean_0
         loss_1 = Nimbus::LossFunctions.mean_squared_error individuals_split_by_snp_value[1], @id_to_fenotype, mean_1
-        loss_2 = Nimbus::LossFunctions.mean_squared_error individuals_split_by_snp_value[2], @id_to_fenotype, mean_2
-        loss_snp = (loss_0 + loss_1 + loss_2) / individuals_count
+        loss_snp = (loss_0 + loss_1) / individuals_count
 
-        min_loss, min_SNP, split, means = loss_snp, snp, individuals_split_by_snp_value, [mean_0, mean_1, mean_2] if loss_snp < min_loss
+        min_loss, min_SNP, split, split_type, means = loss_snp, snp, individuals_split_by_snp_value, node_split_type, [mean_0, mean_1] if loss_snp < min_loss
       end
 
-      return build_branch(min_SNP, split, means, y_hat) if min_loss < node_loss_function
+      return build_branch(min_SNP, split, split_type, means, y_hat) if min_loss < node_loss_function
       return label_node(y_hat, individuals_ids)
     end
 
