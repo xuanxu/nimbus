@@ -60,9 +60,7 @@ module Nimbus
 
     # Clear current console line
     def clear_line!
-      self.write "\r"
-      self.write(" " * 50)
-      self.write "\r"
+      print "\r\e[2K"
     end
 
   end
