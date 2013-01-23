@@ -20,6 +20,7 @@ module Nimbus
 
   STDERR = $stderr
   STDOUT = $stdout
+  STDOUT.sync = true
 
   # Nimbus module singleton methods.
   #
@@ -43,19 +44,16 @@ module Nimbus
     # Writes message to the standard output
     def message(msg)
       STDOUT.puts msg
-      STDOUT.flush
     end
 
     # Writes message to the error output
     def error_message(msg)
       STDERR.puts msg
-      STDERR.flush
     end
 
     # Writes to the standard output
     def write(str)
       STDOUT.write str
-      STDOUT.flush
     end
 
     # Clear current console line
