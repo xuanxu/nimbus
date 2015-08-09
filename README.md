@@ -156,4 +156,4 @@ After testing:
 
 Nimbus was developed by [Juanjo Bazán](http://twitter.com/xuanxu) in collaboration with Oscar González-Recio.
 
-Copyright © 2011 - 2014 Juanjo Bazán, released under the MIT license
+Copyright © 2011 - ∞ Juanjo Bazán, released under the MIT license
