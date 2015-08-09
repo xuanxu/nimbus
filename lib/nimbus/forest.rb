@@ -88,6 +88,14 @@ module Nimbus
       @trees.to_yaml
     end
 
+    def classification?
+      @options.tree[:classes]
+    end
+
+    def regression?
+      @options.tree[:classes].nil?
+    end
+
     private
 
     def individuals_random_sample
@@ -138,14 +146,6 @@ module Nimbus
         }
         @snp_importances[snp] = @snp_importances[snp] / @size
       }
-    end
-
-    def classification?
-      @options.tree[:classes]
-    end
-
-    def regression?
-      @options.tree[:classes].nil?
     end
 
   end

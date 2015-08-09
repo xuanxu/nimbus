@@ -31,7 +31,7 @@ describe Nimbus::ClassificationTree do
 
   it "splits node when building a node and finds a suitable split" do
     @config.load_training_data
-    @tree.stub!(:snps_random_sample).and_return((68..100).to_a) #97 is best split
+    allow_any_instance_of(Nimbus::ClassificationTree).to receive(:snps_random_sample).and_return((68..100).to_a) #97 is best split
 
     @tree.individuals = @config.training_set.individuals
     @tree.id_to_fenotype = @config.training_set.ids_fenotypes
@@ -50,18 +50,18 @@ describe Nimbus::ClassificationTree do
   it "keeps track of all SNPs used for the tree" do
     @config.load_training_data
     snps = (33..65).to_a
-    @tree.stub!(:snps_random_sample).and_return(snps)
+    allow_any_instance_of(Nimbus::ClassificationTree).to receive(:snps_random_sample).and_return(snps)
     @tree.used_snps.should be_nil
     @tree.seed(@config.training_set.individuals, @config.training_set.all_ids, @config.training_set.ids_fenotypes)
     @tree.used_snps.size.should > 4
     @tree.used_snps.each{|snp|
-      snps.include?(snp).should be_true
+      snps.include?(snp).should be true
     }
   end
 
   it "labels node when building a node and there is not a suitable split" do
     @config.load_training_data
-    @tree.stub!(:snps_random_sample).and_return([11])
+    allow_any_instance_of(Nimbus::ClassificationTree).to receive(:snps_random_sample).and_return([11])
 
     @tree.individuals = @config.training_set.individuals
     @tree.id_to_fenotype = @config.training_set.ids_fenotypes
