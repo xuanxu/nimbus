@@ -28,4 +28,4 @@ PLATFORMS
 DEPENDENCIES
   nimbus!
   rake (>= 10.4)
-  rspec (>= 3.3.0)
+  rspec (>= 3.4.0)
