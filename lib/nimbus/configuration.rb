@@ -36,26 +36,26 @@ module Nimbus
     )
 
     DEFAULTS = {
-      :forest_size          => 500,
-      :tree_SNP_sample_size => 60,
-      :tree_SNP_total_count => 200,
-      :tree_node_min_size   => 5,
+      forest_size:          500,
+      tree_SNP_sample_size: 60,
+      tree_SNP_total_count: 200,
+      tree_node_min_size:   5,
 
-      :loss_function_discrete   => 'majority_class',
-      :loss_function_continuous => 'average',
+      loss_function_discrete:   'majority_class',
+      loss_function_continuous: 'average',
 
-      :training_file => 'training.data',
-      :testing_file  => 'testing.data',
-      :forest_file   => 'forest.yml',
-      :config_file   => 'config.yml',
+      training_file: 'training.data',
+      testing_file:  'testing.data',
+      forest_file:   'forest.yml',
+      config_file:   'config.yml',
 
-      :output_forest_file   => 'random_forest.yml',
-      :output_training_file => 'training_file_predictions.txt',
-      :output_testing_file  => 'testing_file_predictions.txt',
-      :output_tree_errors_file => 'generalization_errors.txt',
-      :output_snp_importances_file => 'snp_importances.txt',
+      output_forest_file:   'random_forest.yml',
+      output_training_file: 'training_file_predictions.txt',
+      output_testing_file:  'testing_file_predictions.txt',
+      output_tree_errors_file: 'generalization_errors.txt',
+      output_snp_importances_file: 'snp_importances.txt',
 
-      :silent => false
+      silent: false
     }
 
     # Initialize a Nimbus::Configuration object.
@@ -85,10 +85,10 @@ module Nimbus
     # Accessor method for the tree-related subset of options.
     def tree
       {
-        :snp_sample_size => @tree_SNP_sample_size,
-        :snp_total_count => @tree_SNP_total_count,
-        :tree_node_min_size => @tree_node_min_size,
-        :classes => @classes
+        snp_sample_size: @tree_SNP_sample_size,
+        snp_total_count: @tree_SNP_total_count,
+        tree_node_min_size: @tree_node_min_size,
+        classes: @classes
       }
     end
 
