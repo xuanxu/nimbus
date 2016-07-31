@@ -76,7 +76,7 @@ That way in order to train a forest a training file is needed. And to do the tes
 
 ## Configuration (config.yml)
 
-The values for the input data files and the forest can be specified in the `config.yml` file that shouldbe locate in the directory where you are running `nimbus`.
+The values for the input data files and the forest can be specified in the `config.yml` file that should be locate in the directory where you are running `nimbus`.
 
 The `config.yml` has the following structure and parameters:
 
