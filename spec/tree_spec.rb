@@ -11,9 +11,9 @@ describe Nimbus::Tree do
   end
 
   it "is initialized with tree config info" do
-    @tree.snp_total_count.should == 200
-    @tree.snp_sample_size.should == 60
-    @tree.node_min_size.should   == 5
+    expect(@tree.snp_total_count).to eq 200
+    expect(@tree.snp_sample_size).to eq 60
+    expect(@tree.node_min_size).to eq 5
   end
 
 end

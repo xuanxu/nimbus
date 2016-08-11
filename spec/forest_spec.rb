@@ -11,39 +11,39 @@ describe Nimbus::Forest do
     end
 
     it 'grows a regression forest of N trees' do
-      @forest.trees.should == []
-      @config.forest_size.should == 3
-      @forest.should_not be_classification
-      @forest.should be_regression
+      expect(@forest.trees).to eq []
+      expect(@config.forest_size).to eq 3
+      expect(@forest).to_not be_classification
+      expect(@forest).to be_regression
       @forest.grow
-      @forest.trees.size.should == @config.forest_size
-      @forest.trees.each{|t| t.should be_kind_of Hash}
+      expect(@forest.trees.size).to eq @config.forest_size
+      @forest.trees.each{|t| expect(t).to be_kind_of Hash}
     end
 
     it 'creates averaged predictions for individuals in the training set' do
-      @forest.predictions.should == {}
+      expect(@forest.predictions).to eq({})
       @forest.grow
-      (@forest.predictions.keys - (1..800).to_a ).should == [] # 800 individuals in the training file
-      @forest.predictions.values.each{|v| v.should be_kind_of Numeric}
+      expect((@forest.predictions.keys - (1..800).to_a )).to eq [] # 800 individuals in the training file
+      @forest.predictions.values.each{|v| expect(v).to be_kind_of Numeric}
     end
 
     it 'computes averaged SNP importances for every SNP' do
-      @forest.snp_importances.should == {}
+      expect(@forest.snp_importances).to eq({})
       @forest.grow
-      @forest.snp_importances.keys.sort.should == (1..200).to_a # 200 snps in the training file
-      @forest.snp_importances.values.each{|v| v.should be_kind_of Numeric}
+      expect(@forest.snp_importances.keys.sort).to eq (1..200).to_a # 200 snps in the training file
+      @forest.snp_importances.values.each{|v| expect(v).to be_kind_of Numeric}
     end
 
     it 'does not compute SNP importances if config set to false' do
-      @forest.snp_importances.should == {}
+      expect(@forest.snp_importances).to eq({})
       @forest.options.do_importances = false
       @forest.grow
-      @forest.snp_importances.should == {}
+      expect(@forest.snp_importances).to eq({})
     end
 
     it 'traverses a set of testing individuals through every tree in the forest and returns predictions' do
       @forest = @config.load_forest
-      @forest.predictions.should == {}
+      expect(@forest.predictions).to eq({})
 
       tree_structure = Psych.load(File.open fixture_file('regression_random_forest.yml'))
       expected_predictions = {}
@@ -56,7 +56,7 @@ describe Nimbus::Forest do
       }
 
       @forest.traverse
-      @forest.predictions.should == expected_predictions
+      expect(@forest.predictions).to eq expected_predictions
     end
 
     it 'can output forest structure in YAML format' do
@@ -74,40 +74,40 @@ describe Nimbus::Forest do
     end
 
     it 'grows a classification forest of N trees' do
-      @forest.trees.should == []
-      @config.forest_size.should == 3
-      @forest.should be_classification
-      @forest.should_not be_regression
+      expect(@forest.trees).to eq []
+      expect(@config.forest_size).to eq 3
+      expect(@forest).to be_classification
+      expect(@forest).to_not be_regression
       @forest.grow
-      @forest.trees.size.should == @config.forest_size
-      @forest.trees.each{|t| t.should be_kind_of Hash}
+      expect(@forest.trees.size).to eq @config.forest_size
+      @forest.trees.each{|t| expect(t).to be_kind_of Hash}
     end
 
     it 'creates predictions for individuals in the training set' do
-      @forest.predictions.should == {}
+      expect(@forest.predictions).to eq({})
       @forest.grow
-      (@forest.predictions.keys - (1..1000).to_a ).should == [] # 1000 individuals in the training file
-      @forest.predictions.values.each{|v| v.should be_kind_of String}
+      expect((@forest.predictions.keys - (1..1000).to_a )).to eq [] # 1000 individuals in the training file
+      @forest.predictions.values.each{|v| expect(v).to be_kind_of String}
     end
 
     it 'computes averaged SNP importances for every SNP' do
-      @forest.snp_importances.should == {}
+      expect(@forest.snp_importances).to eq({})
       @forest.options.do_importances = true
       @forest.grow
-      @forest.snp_importances.keys.sort.should == (1..100).to_a # 100 snps in the training file
-      @forest.snp_importances.values.each{|v| v.should be_kind_of Numeric}
+      expect(@forest.snp_importances.keys.sort).to eq (1..100).to_a # 100 snps in the training file
+      @forest.snp_importances.values.each{|v| expect(v).to be_kind_of Numeric}
     end
 
     it 'does not compute SNP importances if config set to false' do
-      @forest.snp_importances.should == {}
+      expect(@forest.snp_importances).to eq({})
       @forest.options.do_importances = false
       @forest.grow
-      @forest.snp_importances.should == {}
+      expect(@forest.snp_importances).to eq({})
     end
 
     it 'traverses a set of testing individuals through every tree in the forest and returns predictions' do
       @forest = @config.load_forest
-      @forest.predictions.should == {}
+      expect(@forest.predictions).to eq({})
 
       tree_structure = Psych.load(File.open fixture_file('classification_random_forest.yml'))
       expected_predictions = {}
@@ -121,7 +121,7 @@ describe Nimbus::Forest do
       }
 
       @forest.traverse
-      @forest.predictions.should == expected_predictions
+      expect(@forest.predictions).to eq expected_predictions
     end
 
     it 'can output forest structure in YAML format' do

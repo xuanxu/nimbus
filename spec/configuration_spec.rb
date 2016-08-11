@@ -7,30 +7,30 @@ describe Nimbus::Configuration do
     config = Nimbus::Configuration.new
     config.load fixture_file('regression_config.yml')
 
-    config.training_file.should == fixture_file('regression_training.data')
-    config.testing_file.should == fixture_file('regression_testing.data')
-    config.forest_file.should == fixture_file('regression_random_forest.yml')
-    config.classes.should be_nil
-    config.do_importances.should be
+    expect(config.training_file).to eq fixture_file('regression_training.data')
+    expect(config.testing_file).to eq fixture_file('regression_testing.data')
+    expect(config.forest_file).to eq fixture_file('regression_random_forest.yml')
+    expect(config.classes).to be_nil
+    expect(config.do_importances).to be
 
-    config.forest_size.should == 3
-    config.tree_SNP_sample_size.should == 60
-    config.tree_SNP_total_count.should == 200
-    config.tree_node_min_size.should == 5
+    expect(config.forest_size).to eq 3
+    expect(config.tree_SNP_sample_size).to eq 60
+    expect(config.tree_SNP_total_count).to eq 200
+    expect(config.tree_node_min_size).to eq 5
 
     config = Nimbus::Configuration.new
     config.load fixture_file('classification_config.yml')
 
-    config.training_file.should == fixture_file('classification_training.data')
-    config.testing_file.should == fixture_file('classification_testing.data')
-    config.forest_file.should == fixture_file('classification_random_forest.yml')
-    config.classes.should == ['0','1']
-    config.do_importances.should_not be
+    expect(config.training_file).to eq fixture_file('classification_training.data')
+    expect(config.testing_file).to eq fixture_file('classification_testing.data')
+    expect(config.forest_file).to eq fixture_file('classification_random_forest.yml')
+    expect(config.classes).to eq ['0','1']
+    expect(config.do_importances).to_not be
 
-    config.forest_size.should == 3
-    config.tree_SNP_sample_size.should == 33
-    config.tree_SNP_total_count.should == 100
-    config.tree_node_min_size.should == 5
+    expect(config.forest_size).to eq 3
+    expect(config.tree_SNP_sample_size).to eq 33
+    expect(config.tree_SNP_total_count).to eq 100
+    expect(config.tree_node_min_size).to eq 5
   end
 
   it 'tree method return tree-related subset of options for regression trees' do
@@ -38,10 +38,10 @@ describe Nimbus::Configuration do
     config.load fixture_file('regression_config.yml')
     tree_options = config.tree
 
-    tree_options[:snp_sample_size].should_not be_nil
-    tree_options[:snp_total_count].should_not be_nil
-    tree_options[:tree_node_min_size].should_not be_nil
-    tree_options[:classes].should be_nil
+    expect(tree_options[:snp_sample_size]).to_not be_nil
+    expect(tree_options[:snp_total_count]).to_not be_nil
+    expect(tree_options[:tree_node_min_size]).to_not be_nil
+    expect(tree_options[:classes]).to be_nil
   end
 
   it 'tree method return tree-related subset of options for classification trees' do
@@ -49,19 +49,19 @@ describe Nimbus::Configuration do
     config.load fixture_file('classification_config.yml')
     tree_options = config.tree
 
-    tree_options[:snp_sample_size].should_not be_nil
-    tree_options[:snp_total_count].should_not be_nil
-    tree_options[:tree_node_min_size].should_not be_nil
-    tree_options[:classes].should_not be_nil
+    expect(tree_options[:snp_sample_size]).to_not be_nil
+    expect(tree_options[:snp_total_count]).to_not be_nil
+    expect(tree_options[:tree_node_min_size]).to_not be_nil
+    expect(tree_options[:classes]).to_not be_nil
   end
 
   it "creates a training set object from training data file" do
     config = Nimbus::Configuration.new
     config.load fixture_file('regression_config.yml')
-    config.training_set.should be_nil
+    expect(config.training_set).to be_nil
     config.load_training_data
-    config.training_set.should be_kind_of Nimbus::TrainingSet
-    config.training_set.all_ids.sort.should == (1..800).to_a
+    expect(config.training_set).to be_kind_of Nimbus::TrainingSet
+    expect(config.training_set.all_ids.sort).to eq (1..800).to_a
 
     File.open(fixture_file('regression_training.data')) {|file|
       feno1, id1, *snp_list_1 = file.readline.split
@@ -72,9 +72,9 @@ describe Nimbus::Configuration do
       i2 = Nimbus::Individual.new(id2.to_i, feno2.to_f, snp_list_2.map{|snp| snp.to_i})
       i3 = Nimbus::Individual.new(id3.to_i, feno3.to_f, snp_list_3.map{|snp| snp.to_i})
 
-      config.training_set.individuals[id1.to_i].id.should == i1.id
-      config.training_set.individuals[id2.to_i].fenotype.should == i2.fenotype
-      config.training_set.individuals[id3.to_i].snp_list.should == i3.snp_list
+      expect(config.training_set.individuals[id1.to_i].id).to eq i1.id
+      expect(config.training_set.individuals[id2.to_i].fenotype).to eq i2.fenotype
+      expect(config.training_set.individuals[id3.to_i].snp_list).to eq i3.snp_list
 
       config.training_set.ids_fenotypes[id1.to_i] = feno1.to_f
       config.training_set.ids_fenotypes[id2.to_i] = feno2.to_f
@@ -93,13 +93,13 @@ describe Nimbus::Configuration do
         test_individuals << Nimbus::Individual.new(data_id.to_i, nil, snp_list.map{|snp| snp.to_i})
       end
     }
-    test_individuals.size.should == 200
+    expect(test_individuals.size).to eq 200
     config.read_testing_data{|individual|
       test_individual = test_individuals.shift
-      individual.id.should_not be_nil
-      individual.id.should == test_individual.id
-      individual.snp_list.should_not be_empty
-      individual.snp_list.should == test_individual.snp_list
+      expect(individual.id).to_not be_nil
+      expect(individual.id).to eq test_individual.id
+      expect(individual.snp_list).to_not be_empty
+      expect(individual.snp_list).to eq test_individual.snp_list
     }
   end
 
@@ -108,14 +108,14 @@ describe Nimbus::Configuration do
     config.load fixture_file('regression_config.yml')
 
     trees = Psych.load(File.open fixture_file('regression_random_forest.yml'))
-    trees.first.keys.first.should == 176
-    trees.size.should == 3
+    expect(trees.first.keys.first).to eq 176
+    expect(trees.size).to eq 3
 
     forest = config.load_forest
-    forest.should be_kind_of Nimbus::Forest
-    forest.trees[0].should == trees.first
-    forest.trees[1].should == trees[1]
-    forest.trees.last.should == trees[2]
+    expect(forest).to be_kind_of Nimbus::Forest
+    expect(forest.trees[0]).to eq trees.first
+    expect(forest.trees[1]).to eq trees[1]
+    expect(forest.trees.last).to eq trees[2]
   end
 
 end
