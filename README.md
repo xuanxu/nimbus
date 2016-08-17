@@ -142,6 +142,12 @@ After testing:
 
  * `testing_file_predictions.txt`: A file defining the structure of the computed Random Forest.
 
+## Test suite
+
+
+## Example usage
+
+
 ## Resources
 
 * [Nimbus website](http://www.nimbusgem.org)
