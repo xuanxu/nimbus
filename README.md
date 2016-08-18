@@ -144,6 +144,13 @@ After testing:
 
 ## Test suite
 
+Nimbus includes example files and a test suite located in the `spec` directory. You can run the specs if you clone the code to your local machine:
+
+````shell
+git clone git://github.com/xuanxu/nimbus.git
+cd nimbus
+rake
+````
 
 ## Example usage
 
