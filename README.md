@@ -144,7 +144,7 @@ After testing:
 
 ## Test suite
 
-Nimbus includes example files and a test suite located in the `spec` directory. You can run the specs if you clone the code to your local machine:
+Nimbus includes a test suite located in the `spec` directory. You can run the specs if you clone the code to your local machine and run the default rake task:
 
 ````shell
 > git clone git://github.com/xuanxu/nimbus.git
@@ -154,6 +154,28 @@ Nimbus includes example files and a test suite located in the `spec` directory. 
 
 ## Example usage
 
+Test files are located in the `/spec/fixtures` directory, both for regression and classification problems.
+Depending on the kind of problem you want to test different files are needed:
+
+### Regression
+
+**Training**
+
+Download the [regression_config.yml file]() and the [regression_training.data file](). Then run nimbus:
+
+````shell
+> nimbus
+````
+
+And it should output a `random_forest.yml` file with the nodes and structure of the resulting random forest.
+
+**Testing**
+
+Now that you have the `random_forest.yml` file, download the [regression_testing.data file]() containing the data to test, and run the testing with:
+
+````shell
+> nimbus
+````
 
 ## Resources
 
