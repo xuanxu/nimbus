@@ -1,8 +1,8 @@
 #Input files
 input:
-  training: classification_training.data
-  testing:  classification_testing.data
-  forest:   classification_random_forest.yml
+  training: training.data
+  testing:  testing.data
+  forest:   random_forest.yml
   classes:  [0,1]
 
 #Forest parameters

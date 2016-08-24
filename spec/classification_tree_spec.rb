@@ -4,7 +4,7 @@ describe Nimbus::ClassificationTree do
 
   before(:each) do
     @config = Nimbus::Configuration.new
-    @config.load fixture_file('classification_config.yml')
+    @config.load fixture_file('classification/config.yml')
 
     @tree = Nimbus::ClassificationTree.new @config.tree
   end
@@ -116,7 +116,7 @@ describe Nimbus::ClassificationTree do
   end
 
   it 'get prediction for an individual pushing it down a tree structure' do
-    tree_structure = Psych.load(File.open fixture_file('classification_random_forest.yml')).first
+    tree_structure = Psych.load(File.open fixture_file('classification/random_forest.yml')).first
     individual_data = [0]*100
     prediction = Nimbus::Tree.traverse tree_structure, individual_data
     expect(prediction).to eq '0'

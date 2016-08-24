@@ -4,7 +4,7 @@ describe Nimbus::RegressionTree do
 
   before(:each) do
     @config = Nimbus::Configuration.new
-    @config.load fixture_file('regression_config.yml')
+    @config.load fixture_file('regression/config.yml')
 
     @tree = Nimbus::RegressionTree.new @config.tree
   end
@@ -113,7 +113,7 @@ describe Nimbus::RegressionTree do
   end
 
   it 'get prediction for an individual pushing it down a tree structure' do
-    tree_structure = Psych.load(File.open fixture_file('regression_random_forest.yml')).first
+    tree_structure = Psych.load(File.open fixture_file('regression/random_forest.yml')).first
     individual_data = [0]*200
     prediction = Nimbus::Tree.traverse tree_structure, individual_data
     expect(prediction).to eq -0.90813

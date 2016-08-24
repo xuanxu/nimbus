@@ -5,11 +5,11 @@ describe Nimbus::Configuration do
 
   it "loads configuration options from config file" do
     config = Nimbus::Configuration.new
-    config.load fixture_file('regression_config.yml')
+    config.load fixture_file('regression/config.yml')
 
-    expect(config.training_file).to eq fixture_file('regression_training.data')
-    expect(config.testing_file).to eq fixture_file('regression_testing.data')
-    expect(config.forest_file).to eq fixture_file('regression_random_forest.yml')
+    expect(config.training_file).to eq fixture_file('regression/training.data')
+    expect(config.testing_file).to eq fixture_file('regression/testing.data')
+    expect(config.forest_file).to eq fixture_file('regression/random_forest.yml')
     expect(config.classes).to be_nil
     expect(config.do_importances).to be
 
@@ -19,11 +19,11 @@ describe Nimbus::Configuration do
     expect(config.tree_node_min_size).to eq 5
 
     config = Nimbus::Configuration.new
-    config.load fixture_file('classification_config.yml')
+    config.load fixture_file('classification/config.yml')
 
-    expect(config.training_file).to eq fixture_file('classification_training.data')
-    expect(config.testing_file).to eq fixture_file('classification_testing.data')
-    expect(config.forest_file).to eq fixture_file('classification_random_forest.yml')
+    expect(config.training_file).to eq fixture_file('classification/training.data')
+    expect(config.testing_file).to eq fixture_file('classification/testing.data')
+    expect(config.forest_file).to eq fixture_file('classification/random_forest.yml')
     expect(config.classes).to eq ['0','1']
     expect(config.do_importances).to_not be
 
@@ -35,7 +35,7 @@ describe Nimbus::Configuration do
 
   it 'tree method return tree-related subset of options for regression trees' do
     config = Nimbus::Configuration.new
-    config.load fixture_file('regression_config.yml')
+    config.load fixture_file('regression/config.yml')
     tree_options = config.tree
 
     expect(tree_options[:snp_sample_size]).to_not be_nil
@@ -46,7 +46,7 @@ describe Nimbus::Configuration do
 
   it 'tree method return tree-related subset of options for classification trees' do
     config = Nimbus::Configuration.new
-    config.load fixture_file('classification_config.yml')
+    config.load fixture_file('classification/config.yml')
     tree_options = config.tree
 
     expect(tree_options[:snp_sample_size]).to_not be_nil
@@ -57,13 +57,13 @@ describe Nimbus::Configuration do
 
   it "creates a training set object from training data file" do
     config = Nimbus::Configuration.new
-    config.load fixture_file('regression_config.yml')
+    config.load fixture_file('regression/config.yml')
     expect(config.training_set).to be_nil
     config.load_training_data
     expect(config.training_set).to be_kind_of Nimbus::TrainingSet
     expect(config.training_set.all_ids.sort).to eq (1..800).to_a
 
-    File.open(fixture_file('regression_training.data')) {|file|
+    File.open(fixture_file('regression/training.data')) {|file|
       feno1, id1, *snp_list_1 = file.readline.split
       feno2, id2, *snp_list_2 = file.readline.split
       feno3, id3, *snp_list_3 = file.readline.split
@@ -84,10 +84,10 @@ describe Nimbus::Configuration do
 
   it "reads testing data and yields one individual at a time" do
     config = Nimbus::Configuration.new
-    config.load fixture_file('regression_config.yml')
+    config.load fixture_file('regression/config.yml')
 
     test_individuals = []
-    File.open(fixture_file('regression_testing.data')) {|file|
+    File.open(fixture_file('regression/testing.data')) {|file|
       file.each do |line|
         data_id, *snp_list = line.strip.split
         test_individuals << Nimbus::Individual.new(data_id.to_i, nil, snp_list.map{|snp| snp.to_i})
@@ -105,9 +105,9 @@ describe Nimbus::Configuration do
 
   it "creates a forest object loading data from a yaml file" do
     config = Nimbus::Configuration.new
-    config.load fixture_file('regression_config.yml')
+    config.load fixture_file('regression/config.yml')
 
-    trees = Psych.load(File.open fixture_file('regression_random_forest.yml'))
+    trees = Psych.load(File.open fixture_file('regression/random_forest.yml'))
     expect(trees.first.keys.first).to eq 176
     expect(trees.size).to eq 3
 

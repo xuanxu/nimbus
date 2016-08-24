@@ -5,7 +5,7 @@ describe Nimbus::Forest do
   describe "Regression" do
     before(:each) do
       @config = Nimbus::Configuration.new
-      @config.load fixture_file('regression_config.yml')
+      @config.load fixture_file('regression/config.yml')
       @config.load_training_data
       @forest = ::Nimbus::Forest.new @config
     end
@@ -45,7 +45,7 @@ describe Nimbus::Forest do
       @forest = @config.load_forest
       expect(@forest.predictions).to eq({})
 
-      tree_structure = Psych.load(File.open fixture_file('regression_random_forest.yml'))
+      tree_structure = Psych.load(File.open fixture_file('regression/random_forest.yml'))
       expected_predictions = {}
       @config.read_testing_data{|individual|
         individual_prediction = 0.0
@@ -61,14 +61,14 @@ describe Nimbus::Forest do
 
     it 'can output forest structure in YAML format' do
       @forest = @config.load_forest
-      Psych.load(File.open fixture_file('regression_random_forest.yml')) == Psych.load(@forest.to_yaml)
+      Psych.load(File.open fixture_file('regression/random_forest.yml')) == Psych.load(@forest.to_yaml)
     end
   end
 
   describe "Classification" do
     before(:each) do
       @config = Nimbus::Configuration.new
-      @config.load fixture_file('classification_config.yml')
+      @config.load fixture_file('classification/config.yml')
       @config.load_training_data
       @forest = ::Nimbus::Forest.new @config
     end
@@ -109,7 +109,7 @@ describe Nimbus::Forest do
       @forest = @config.load_forest
       expect(@forest.predictions).to eq({})
 
-      tree_structure = Psych.load(File.open fixture_file('classification_random_forest.yml'))
+      tree_structure = Psych.load(File.open fixture_file('classification/random_forest.yml'))
       expected_predictions = {}
       @config.read_testing_data{|individual|
         individual_prediction = []
@@ -126,7 +126,7 @@ describe Nimbus::Forest do
 
     it 'can output forest structure in YAML format' do
       @forest = @config.load_forest
-      Psych.load(File.open fixture_file('classification_random_forest.yml')) == Psych.load(@forest.to_yaml)
+      Psych.load(File.open fixture_file('classification/random_forest.yml')) == Psych.load(@forest.to_yaml)
     end
   end
 end
