@@ -66,17 +66,18 @@ Once you have nimbus installed in your system, you can run the gem using the `ni
 
     $ nimbus
 
-It will look for these files:
+It will look for these files in the directory where Nimbus is running:
 
-* `training.data`: If found it will be used to build a random forest
-* `testing.data` : If found it will be pushed down the forest to obtain predictions for every individual in the file
-* `random_forest.yml`: If found it will be the forest used for the testing.
+* `training.data`: If found it will be used to build a random forest.
+* `testing.data` : If found it will be pushed down the forest to obtain predictions for every individual in the file.
+* `random_forest.yml`: If found it will be the forest used for the testing instead of building one.
+* `config.yml`: A file detailing random forest parameters and datasets. If not found default values will be used.
 
-That way in order to train a forest a training file is needed. And to do the testing you need two files: the testing file and one of the other two: the training OR the random_forest file, because nimbus needs a forest from which obtain the predictions.
+That way in order to train a forest a training file is needed. And to do the testing you need two files: the testing file and one of the other two: the training OR the random_forest file, because Nimbus needs a forest from which obtain the predictions.
 
 ## Configuration (config.yml)
 
-The values for the input data files and the forest can be specified in the `config.yml` file that should be locate in the directory where you are running `nimbus`.
+The names for the input data files and the forest parameters can be specified in the `config.yml` file that should be locate in the directory where you are running `nimbus`.
 
 The `config.yml` has the following structure and parameters:
 
@@ -94,14 +95,14 @@ The `config.yml` has the following structure and parameters:
       SNP_total_count: 200
       node_min_size: 5
 
-Under the input chapter:
+### Under the input chapter:
 
  * `training`: specify the path to the training data file (optional, if specified `nimbus` will create a random forest).
- * `testing`: specify the path to the testing data file (optional, if specified `nimbus` will traverse this dat through a random forest).
+ * `testing`: specify the path to the testing data file (optional, if specified `nimbus` will traverse this data through a random forest).
  * `forest`: specify the path to a file containing a random forest structure (optional, if there is also testing file, this will be the forest used for the testing).
  * `classes`: **optional (needed only for classification problems)**. Specify the list of classes in the input files as a comma separated list between squared brackets, e.g.:`[A, B]`.
 
-Under the forest chapter:
+### Under the forest chapter:
 
  * `forest_size`: number of trees for the forest.
  * `SNP_sample_size_mtry`: size of the random sample of SNPs to be used in every tree node.
@@ -109,6 +110,19 @@ Under the forest chapter:
  * `node_min_size`: minimum amount of individuals in a tree node to make a split.
  * `var_importances`: **optional**. If set to `No` Nimbus will not calculate SNP importances.
 
+### Default values
+
+If there is no config.yml file present, Nimbus will use these default values:
+
+````yaml
+  forest_size:          300
+  tree_SNP_sample_size: 60
+  tree_SNP_total_count: 200
+  tree_node_min_size:   5
+  training_file: 'training.data'
+  testing_file:  'testing.data'
+  forest_file:   'forest.yml
+````
 
 ## Input files
 
