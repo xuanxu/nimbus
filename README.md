@@ -58,7 +58,9 @@ You can disable this behaviour (and speed up the training process) by setting th
 
 You need to have [Ruby](https://www.ruby-lang.org) (2.1 or higher) with Rubygems installed in your computer. Then install Nimbus with:
 
-    > gem install nimbus
+````shell
+> gem install nimbus
+````
 
 There are not extra dependencies needed.
 
@@ -66,7 +68,9 @@ There are not extra dependencies needed.
 
 Once you have nimbus installed in your system, you can run the gem using the `nimbus` executable:
 
-    > nimbus
+````shell
+> nimbus
+````
 
 It will look for these files in the directory where Nimbus is running:
 
@@ -117,13 +121,13 @@ The `config.yml` has the following structure and parameters:
 If there is no config.yml file present, Nimbus will use these default values:
 
 ````yaml
-  forest_size:          300
-  tree_SNP_sample_size: 60
-  tree_SNP_total_count: 200
-  tree_node_min_size:   5
-  training_file: 'training.data'
-  testing_file:  'testing.data'
-  forest_file:   'forest.yml
+forest_size:          300
+tree_SNP_sample_size: 60
+tree_SNP_total_count: 200
+tree_node_min_size:   5
+training_file: 'training.data'
+testing_file:  'testing.data'
+forest_file:   'forest.yml
 ````
 
 ## Input files
@@ -156,7 +160,72 @@ After training:
 
 After testing:
 
- * `testing_file_predictions.txt`: A file defining the structure of the computed Random Forest.
+ * `testing_file_predictions.txt`: A file detailing the predicted results for the testing dataset.
+
+## Example usage
+
+### Sample files
+
+Sample files are located in the `/spec/fixtures` directory, both for regression and classification problems. They can be used as a starting point to tweak your own configurations.
+
+Depending on the kind of problem you want to test different files are needed:
+
+### Regression
+
+**Test with a Random Forest created from a training data set**
+
+Download/copy the `config.yml`, `training.data` and `testing.data` files from the [regression folder](./tree/master/spec/fixtures/regression).
+
+Then run nimbus:
+
+````shell
+> nimbus
+````
+
+It should output a `random_forest.yml` file with the nodes and structure of the resulting random forest, the `generalization_errors` and `snp_importances` files, and the predictions for both training and testing datasets (`training_file_predictions.txt` and `testing_file_predictions.txt` files).
+
+**Test with a Random Forest previously created**
+
+Download/copy the `config.yml`, `testing.data` and `random forest.yml` files from the [regression folder](./tree/master/spec/fixtures/regression).
+
+Edit the `config.yml` file to comment/remove the training entry.
+
+Then use nimbus to run the testing:
+
+````shell
+> nimbus
+````
+
+It should output a `testing_file_predictions.txt` file with the resulting predictions for the testing dataset using the given random forest.
+
+### Classification
+
+**Test with a Random Forest created from a training data set**
+
+Download/copy the `config.yml`, `training.data` and `testing.data` files from the [classification folder](./tree/master/spec/fixtures/classification).
+
+Then run nimbus:
+
+````shell
+> nimbus
+````
+
+It should output a `random_forest.yml` file with the nodes and structure of the resulting random forest, the `generalization_errors` and `snp_importances` files, and the predictions for both training and testing datasets (`training_file_predictions.txt` and `testing_file_predictions.txt` files).
+
+**Test with a Random Forest previously created**
+
+Download/copy the `config.yml`, `testing.data` and `random forest.yml` files from the [classification folder](./tree/master/spec/fixtures/classification).
+
+Edit the `config.yml` file to comment/remove the training entry.
+
+Then use nimbus to run the testing:
+
+````shell
+> nimbus
+````
+
+It should output a `testing_file_predictions.txt` file with the resulting predictions for the testing dataset using the given random forest.
+
 
 ## Test suite
 
@@ -165,32 +234,8 @@ Nimbus includes a test suite located in the `spec` directory. You can run the sp
 ````shell
 > git clone git://github.com/xuanxu/nimbus.git
 > cd nimbus
+> bundle install
 > rake
-````
-
-## Example usage
-
-Test files are located in the `/spec/fixtures` directory, both for regression and classification problems.
-Depending on the kind of problem you want to test different files are needed:
-
-### Regression
-
-**Training**
-
-Download the [regression_config.yml file]() and the [regression_training.data file](). Then run nimbus:
-
-````shell
-> nimbus
-````
-
-And it should output a `random_forest.yml` file with the nodes and structure of the resulting random forest.
-
-**Testing**
-
-Now that you have the `random_forest.yml` file, download the [regression_testing.data file]() containing the data to test, and run the testing with:
-
-````shell
-> nimbus
 ````
 
 ## Resources
@@ -207,4 +252,4 @@ Now that you have the `random_forest.yml` file, download the [regression_testing
 
 Nimbus was developed by [Juanjo Bazán](http://twitter.com/xuanxu) in collaboration with Oscar González-Recio.
 
-Copyright © 2016 Juanjo Bazán, released under the MIT license
+Copyright © 2017 Juanjo Bazán, released under the MIT license
