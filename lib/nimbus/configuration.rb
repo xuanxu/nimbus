@@ -36,7 +36,7 @@ module Nimbus
     )
 
     DEFAULTS = {
-      forest_size:          500,
+      forest_size:          300,
       tree_SNP_sample_size: 60,
       tree_SNP_total_count: 200,
       tree_node_min_size:   5,
