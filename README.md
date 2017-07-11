@@ -83,7 +83,7 @@ That way in order to train a forest a training file is needed. And to do the tes
 
 ## Configuration (config.yml)
 
-The names for the input data files and the forest parameters can be specified in the `config.yml` file that should be locate in the directory where you are running `nimbus`.
+The names for the input data files and the forest parameters can be specified in the `config.yml` file that should be located in the directory where you are running `nimbus`.
 
 The `config.yml` has the following structure and parameters:
 
@@ -186,7 +186,7 @@ It should output a `random_forest.yml` file with the nodes and structure of the 
 
 **Test with a Random Forest previously created**
 
-Download/copy the `config.yml`, `testing.data` and `random forest.yml` files from the [regression folder](./tree/master/spec/fixtures/regression).
+Download/copy the `config.yml`, `testing.data` and `random_forest.yml` files from the [regression folder](./tree/master/spec/fixtures/regression).
 
 Edit the `config.yml` file to comment/remove the training entry.
 
@@ -210,11 +210,11 @@ Then run nimbus:
 > nimbus
 ````
 
-It should output a `random_forest.yml` file with the nodes and structure of the resulting random forest, the `generalization_errors` and `snp_importances` files, and the predictions for both training and testing datasets (`training_file_predictions.txt` and `testing_file_predictions.txt` files).
+It should output a `random_forest.yml` file with the nodes and structure of the resulting random forest, the `generalization_errors` file, and the predictions for both training and testing datasets (`training_file_predictions.txt` and `testing_file_predictions.txt` files).
 
 **Test with a Random Forest previously created**
 
-Download/copy the `config.yml`, `testing.data` and `random forest.yml` files from the [classification folder](./tree/master/spec/fixtures/classification).
+Download/copy the `config.yml`, `testing.data` and `random_forest.yml` files from the [classification folder](./tree/master/spec/fixtures/classification).
 
 Edit the `config.yml` file to comment/remove the training entry.
 
@@ -248,8 +248,19 @@ Nimbus includes a test suite located in the `spec` directory. You can run the sp
 * [Random Forest at Wikipedia](http://en.wikipedia.org/wiki/Random_forest)
 * [RF Leo Breiman page](http://www.stat.berkeley.edu/~breiman/RandomForests/)
 
+
+## Contributing
+
+Contributions are welcome. We encourage you to contribute to the Nimbus codebase.
+
+Please read the [CONTRIBUTING](CONTRIBUTING.md) file.
+
+
 ## Credits
 
 Nimbus was developed by [Juanjo Bazán](http://twitter.com/xuanxu) in collaboration with Oscar González-Recio.
 
-Copyright © 2017 Juanjo Bazán, released under the MIT license
+
+## LICENSE
+
+Copyright © 2017 Juanjo Bazán, released under the [MIT license](MIT-LICENSE.txt)
