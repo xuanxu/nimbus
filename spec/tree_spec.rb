@@ -5,7 +5,7 @@ describe Nimbus::Tree do
 
   before(:each) do
     @config = Nimbus::Configuration.new
-    @config.load fixture_file('regression_config.yml')
+    @config.load fixture_file('regression/config.yml')
 
     @tree = Nimbus::Tree.new @config.tree
   end

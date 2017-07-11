@@ -1,8 +1,8 @@
 #Input files
 input:
-  training: regression_training.data
-  testing:  regression_testing.data
-  forest:   regression_random_forest.yml
+  training: training.data
+  testing:  testing.data
+  forest:   random_forest.yml
 
 #Forest parameters
 forest:
