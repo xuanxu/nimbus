@@ -58,13 +58,13 @@ You can disable this behaviour (and speed up the training process) by setting th
 
 You need to have [Ruby](https://www.ruby-lang.org) (2.0 or higher) with Rubygems installed in your computer. Then install nimbus with:
 
-    $ gem install nimbus
+    > gem install nimbus
 
 ## Getting Started
 
 Once you have nimbus installed in your system, you can run the gem using the `nimbus` executable:
 
-    $ nimbus
+    > nimbus
 
 It will look for these files in the directory where Nimbus is running:
 
