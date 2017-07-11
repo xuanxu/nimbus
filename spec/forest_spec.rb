@@ -6,7 +6,7 @@ describe Nimbus::Forest do
     before(:each) do
       @config = Nimbus::Configuration.new
       @config.load fixture_file('regression/config.yml')
-      @config.load_training_data
+      @config.load_training_data if @config.do_training
       @forest = ::Nimbus::Forest.new @config
     end
 

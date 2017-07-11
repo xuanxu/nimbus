@@ -126,8 +126,8 @@ module Nimbus
         @forest_file   = File.expand_path(DEFAULTS[:forest_file  ], Dir.pwd) if File.exists? File.expand_path(DEFAULTS[:forest_file  ], Dir.pwd)
       end
 
-      @do_training = true if @training_file
-      @do_testing  = true if @testing_file
+      @do_training = true unless @training_file.nil?
+      @do_testing  = true unless @testing_file.nil?
       @classes = @classes.map{|c| c.to_s.strip} if @classes
 
       if @do_testing && !@do_training && !@forest_file
