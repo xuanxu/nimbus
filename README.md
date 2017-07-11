@@ -54,11 +54,13 @@ By default Nimbus will estimate SNP importances everytime a training file is run
 
 You can disable this behaviour (and speed up the training process) by setting the parameter `var_importances: No` in the configuration file.
 
-## Install
+## Installation
 
-You need to have [Ruby](https://www.ruby-lang.org) (2.0 or higher) with Rubygems installed in your computer. Then install nimbus with:
+You need to have [Ruby](https://www.ruby-lang.org) (2.1 or higher) with Rubygems installed in your computer. Then install Nimbus with:
 
     > gem install nimbus
+
+There are not extra dependencies needed.
 
 ## Getting Started
 
