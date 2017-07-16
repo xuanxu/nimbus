@@ -229,7 +229,7 @@ It should output a `testing_file_predictions.txt` file with the resulting predic
 
 ## Test suite
 
-Nimbus includes a test suite located in the `spec` directory. You can run the specs if you clone the code to your local machine and run the default rake task:
+Nimbus includes a test suite located in the `spec` directory. The current state of the build is [publicly tracked by Travis C.I.](https://travis-ci.org/xuanxu/nimbus). You can run the specs locally if you clone the code to your local machine and run the default rake task:
 
 ````shell
 > git clone git://github.com/xuanxu/nimbus.git
