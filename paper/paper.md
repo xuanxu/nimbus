@@ -26,6 +26,8 @@ bibliography: paper.bib
 
 Nimbus is a Ruby gem implementing Random Forest in a genomic selection context, meaning every input file is expected to contain genotype and/or phenotype data from a sample of individuals. Other than the ids of the individuals, Nimbus handle the data as genotype values for single-nucleotide polymorphisms (SNPs), so the variables in the classifier must have values of 0, 1 or 2, corresponding with SNPs classes of AA, AB and BB.
 
+Nimbus provides a novel dataframe of random forest under ruby, and implements a modified algorithm that can separate all genotypes for a single marker, which can accomodate both additivity and dominance. Further, it allows the user to specify a loss function and provide full information of the trees in a .yml file.
+
 Nimbus can be used to:
 
 - Create a random forest using a training sample of individuals with phenotype data.
@@ -50,9 +52,9 @@ The algorithm is robust to over-fitting and able to capture complex interaction 
 
 - Let the number of training cases be N, and the number of variables (SNPs) in the classifier be M.
 
-- We are told the number mtry of input variables to be used to determine the decision at a node of the tree; m should be much less than M
+- The mtry number of input variables is told to the algorithm to be used in determining the decision at a node of the tree; m should be much less than M (usually 1/3), and the optimal value should be tuned for methods like grid search.
 
-- Choose a training set for this tree by choosing n times with replacement from all N available training cases (i.e. take a bootstrap sample). Use the rest of the cases (Out Of Bag sample) to estimate the error of the tree, by predicting their classes.
+- Choose a training set for this tree by drawing n samples with replacement from all N available training cases (i.e. bootstrap sampling). The rest of the cases (Out Of Bag sample) will be used to estimate the error of the tree at predicting the classes of this out of Bag samples.
 
 - For each node of the tree, randomly choose m SNPs on which to base the decision at that node. Calculate the best split based on these m SNPs in the training set.
 
@@ -61,7 +63,7 @@ The algorithm is robust to over-fitting and able to capture complex interaction 
 - When in a node there is not any SNP split that minimizes the general loss function of the node, or the number of individuals in the node is less than the minimum node size then label the node with the average phenotype value of the individuals in the node.
 
 
-**Testing**: For prediction a sample is pushed down the tree. It is assigned the label of the training sample in the terminal node it ends up in. This procedure is iterated over all trees in the ensemble, and the average vote of all trees is reported as random forest prediction.
+**Testing**: An independent sample can be pushed down the tree to predict the most probable phenotype given the SNP genotypes. It is assigned the label of the training sample in the terminal node it ends up in. This procedure is iterated over all trees in the ensemble, and the average vote of all trees is reported as the random forest prediction.
 
 
 ### Nimbus
