@@ -26,7 +26,7 @@ bibliography: paper.bib
 
 Nimbus is a Ruby gem implementing Random Forest in a genomic selection context, meaning every input file is expected to contain genotype and/or phenotype data from a sample of individuals. Other than the ids of the individuals, Nimbus handle the data as genotype values for single-nucleotide polymorphisms (SNPs), so the variables in the classifier must have values of 0, 1 or 2, corresponding with SNPs classes of AA, AB and BB.
 
-Nimbus provides a novel dataframe of random forest under ruby, and implements a modified algorithm that can separate all genotypes for a single marker, which can accomodate both additivity and dominance. Further, it allows the user to specify a loss function and provide full information of the trees in a .yml file.
+Nimbus provides a novel dataframe of random forest under ruby, and implements a modified algorithm that can separate all genotypes for a single marker, which can accommodate both additivity and dominance. Further, it allows the user to specify a loss function and provide full information of the trees in a .yml file.
 
 Nimbus can be used to:
 
@@ -74,7 +74,7 @@ Nimbus can also be run to make prediction in a validation set or in a set of dat
 
 If a learning sample is provided, the gem will create a file with the variable importance of each feature (marker) in the data. The higher the importance is, the more relevant the marker is to correctly predict the response variable in new data.
 
-Nimbus can be use for both classification or regression problems, and the user may provide different parameter values in a configuration file to tune the performance of the algorithm.
+Nimbus can be used for both classification or regression problems, and the user may provide different parameter values in a configuration file to tune the performance of the algorithm.
 
 -![Output predictions](nimbus_outputs.png)
 
