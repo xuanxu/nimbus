@@ -256,7 +256,9 @@ Contributions are welcome. We encourage you to contribute to the Nimbus codebase
 Please read the [CONTRIBUTING](CONTRIBUTING.md) file.
 
 
-## Credits
+## Credits and DOI
+
+If you use Nimbus, please cite our [JOSS paper: http://dx.doi.org/10.21105/joss.00351](http://dx.doi.org/10.21105/joss.00351)
 
 Nimbus was developed by [Juanjo Bazán](http://twitter.com/xuanxu) in collaboration with Oscar González-Recio.
 
