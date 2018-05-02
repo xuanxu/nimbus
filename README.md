@@ -260,6 +260,9 @@ Please read the [CONTRIBUTING](CONTRIBUTING.md) file.
 
 If you use Nimbus, please cite our [JOSS paper: http://dx.doi.org/10.21105/joss.00351](http://dx.doi.org/10.21105/joss.00351)
 
+**Cite as:**  
+*Bazán et al, (2017), Nimbus: a Ruby gem to implement Random Forest algorithms in a genomic selection context, Journal of Open Source Software, 2(16), 351, doi:10.21105/joss.0035*
+
 Nimbus was developed by [Juanjo Bazán](http://twitter.com/xuanxu) in collaboration with Oscar González-Recio.
 
 
