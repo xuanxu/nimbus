@@ -3,6 +3,7 @@ Random Forest algorithm for genomic selection.
 
 [![Build Status](https://secure.travis-ci.org/xuanxu/nimbus.png?branch=master)](http://travis-ci.org/xuanxu/nimbus)
 [![Gem Version](https://badge.fury.io/rb/nimbus.png)](http://badge.fury.io/rb/nimbus)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/xuanxu/nimbus/blob/master/MIT-LICENSE.txt)
 
 ## Random Forest
 
