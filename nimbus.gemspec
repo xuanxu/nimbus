@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.email = ["jjbazan@gmail.com"]
   s.homepage = 'http://nimbusgem.org'
 
-  s.has_rdoc = true
   s.rdoc_options = ['--main', 'README.rdoc', '--charset=UTF-8']
 
   s.files = %w(MIT-LICENSE.txt README.md CONTRIBUTING.md CODE_OF_CONDUCT.md) + Dir.glob("{spec,lib/**/*}") & `git ls-files -z`.split("\0")
