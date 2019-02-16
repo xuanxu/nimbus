@@ -270,4 +270,4 @@ Nimbus was developed by [Juanjo Bazán](http://twitter.com/xuanxu) in collaborat
 
 ## LICENSE
 
-Copyright © 2017 Juanjo Bazán, released under the [MIT license](MIT-LICENSE.txt)
+Copyright © Juanjo Bazán, released under the [MIT license](MIT-LICENSE.txt)
