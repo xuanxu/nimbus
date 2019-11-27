@@ -1,0 +1,15 @@
+cff-version: 1.1.0
+message: If you use Nimbus, please cite it as below.
+authors:
+  - family-names: Bazán
+    given-names: Juanjo
+    orcid: https://orcid.org/0000-0001-7699-3983
+  - family-names: Gonzalez-Recio
+    given-names: Oscar
+    orcid: https://orcid.org/0000-0002-9106-4063
+title: "Nimbus: a Ruby gem to implement Random Forest algorithms in a genomic selection context"
+version: 2.3.0
+doi: 10.21105/joss.00351
+date-released: 2017-08-18
+repository-code: "https://github.com/xuanxu/nimbus"
+license: MIT
