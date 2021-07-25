@@ -1,0 +1,29 @@
+name: Tests
+
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.failure-allowed }}
+    strategy:
+      matrix:
+        ruby-version: ['2.6.8', '2.7.4', '3.0.2']
+        failure-allowed: [false]
+        include:
+        - ruby-version: 'head'
+          failure-allowed: true
+        - ruby-version: 'truffleruby'
+          failure-allowed: true
+        - ruby-version: 'jruby'
+          failure-allowed: true
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true
+    - name: Run tests
+      run: |
+        bundle exec ruby -v
+        bundle exec rake
