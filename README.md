@@ -1,7 +1,7 @@
 # Nimbus
 Random Forest algorithm for genomic selection.
 
-[![Build Status](https://travis-ci.com/xuanxu/nimbus.png?branch=master)](http://travis-ci.com/xuanxu/nimbus)
+[![Build Status](https://github.com/xuanxu/nimbus/actions/workflows/tests.yml/badge.svg)](https://github.com/xuanxu/nimbus/actions/workflows/tests.yml)
 [![Gem Version](https://badge.fury.io/rb/nimbus.png)](http://badge.fury.io/rb/nimbus)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/xuanxu/nimbus/blob/master/MIT-LICENSE.txt)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00351/status.svg)](https://doi.org/10.21105/joss.00351)

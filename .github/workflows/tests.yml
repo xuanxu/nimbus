@@ -26,4 +26,4 @@ jobs:
     - name: Run tests
       run: |
         bundle exec ruby -v
-        bundle exec rake
+        bundle exec rspec spec
