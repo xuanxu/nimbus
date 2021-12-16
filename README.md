@@ -58,7 +58,7 @@ You can disable this behaviour (and speed up the training process) by setting th
 
 ## Installation
 
-You need to have [Ruby](https://www.ruby-lang.org) (2.1 or higher) with Rubygems installed in your computer. Then install Nimbus with:
+You need to have [Ruby](https://www.ruby-lang.org) (2.6 or higher) with Rubygems installed in your computer. Then install Nimbus with:
 
 ````shell
 > gem install nimbus
