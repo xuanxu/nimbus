@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.authors = ['Juanjo Bazán', 'Oscar González Recio']
   s.email = ["jjbazan@gmail.com"]
   s.homepage = 'http://nimbusgem.org'
+  s.license = "MIT"
 
   s.rdoc_options = ['--main', 'README.rdoc', '--charset=UTF-8']
 
@@ -21,5 +22,5 @@ Gem::Specification.new do |s|
   s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_development_dependency("rspec", ">=3.12.0")
+  s.add_development_dependency("rspec",  "~> 3.12")
 end
