@@ -105,7 +105,7 @@ module Nimbus
     def load(config_file = DEFAULTS[:config_file])
       user_config_params = {}
       dirname = Dir.pwd
-      if File.exists?(File.expand_path(config_file, Dir.pwd))
+      if File.exist?(File.expand_path(config_file, Dir.pwd))
         begin
           config_file_path = File.expand_path config_file, Dir.pwd
           user_config_params = Psych.load(File.open(config_file_path))
@@ -121,9 +121,9 @@ module Nimbus
         @forest_file   = File.expand_path(user_config_params['input']['forest'  ], dirname) if user_config_params['input']['forest']
         @classes       = user_config_params['input']['classes'] if user_config_params['input']['classes']
       else
-        @training_file = File.expand_path(DEFAULTS[:training_file], Dir.pwd) if File.exists? File.expand_path(DEFAULTS[:training_file], Dir.pwd)
-        @testing_file  = File.expand_path(DEFAULTS[:testing_file ], Dir.pwd) if File.exists? File.expand_path(DEFAULTS[:testing_file ], Dir.pwd)
-        @forest_file   = File.expand_path(DEFAULTS[:forest_file  ], Dir.pwd) if File.exists? File.expand_path(DEFAULTS[:forest_file  ], Dir.pwd)
+        @training_file = File.expand_path(DEFAULTS[:training_file], Dir.pwd) if File.exist? File.expand_path(DEFAULTS[:training_file], Dir.pwd)
+        @testing_file  = File.expand_path(DEFAULTS[:testing_file ], Dir.pwd) if File.exist? File.expand_path(DEFAULTS[:testing_file ], Dir.pwd)
+        @forest_file   = File.expand_path(DEFAULTS[:forest_file  ], Dir.pwd) if File.exist? File.expand_path(DEFAULTS[:forest_file  ], Dir.pwd)
       end
 
       @do_training = true unless @training_file.nil?
@@ -186,7 +186,7 @@ module Nimbus
     # The format of the input file should be the same as the forest output data of a Nimbus Application.
     def load_forest
       trees = []
-      if File.exists?(@forest_file)
+      if File.exist?(@forest_file)
         begin
           trees = Psych.load(File.open @forest_file)
         rescue ArgumentError => e
