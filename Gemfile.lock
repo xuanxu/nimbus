@@ -28,7 +28,7 @@ PLATFORMS
 DEPENDENCIES
   nimbus!
   rake (>= 13.0)
-  rspec (>= 3.12.0)
+  rspec (~> 3.12)
 
 BUNDLED WITH
    2.4.8
