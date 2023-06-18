@@ -242,7 +242,6 @@ Nimbus includes a test suite located in the `spec` directory. The current state 
 
 ## Resources
 
-* [Nimbus website](http://www.nimbusgem.org)
 * [Source code](http://github.com/xuanxu/nimbus) – Fork the code
 * [Issues](http://github.com/xuanxu/nimbus/issues) – Bugs and feature requests
 * [Online rdocs](http://rubydoc.info/gems/nimbus/frames)
