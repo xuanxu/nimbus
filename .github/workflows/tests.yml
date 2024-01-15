@@ -12,6 +12,8 @@ jobs:
         include:
         - ruby-version: 'head'
           failure-allowed: true
+        - ruby-version: '3.3.0'
+          failure-allowed: true
     steps:
     - uses: actions/checkout@v4
     - name: Set up Ruby
