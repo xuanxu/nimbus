@@ -7,7 +7,7 @@ jobs:
     continue-on-error: ${{ matrix.failure-allowed }}
     strategy:
       matrix:
-        ruby-version: ['2.6.10', '2.7.8', '3.0.6', '3.1.4', '3.2.2', '3.3', '3.4']
+        ruby-version: ['2.6.10', '2.7.8', '3.0.6', '3.1.4', '3.2.2', '3.3', '3.4', '4.0']
         failure-allowed: [false]
         include:
         - ruby-version: 'head'
